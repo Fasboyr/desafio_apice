@@ -6,10 +6,10 @@ const router = express.Router();
 
 router.get("/", getHood)
 
-router.get("/", addHood)
+router.post("/", addHood)
 
-router.get("/:id", updateHood)
+router.put("/:id", updateHood)
 
-router.get("/:id", deleteHood)
+router.delete("/:id", deleteHood)
 
 export default router

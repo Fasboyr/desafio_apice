@@ -34,7 +34,7 @@ const Form = ({getHoods, onEdit, setOnEdit }) => {
 
         if (onEdit) {
             await axios
-                .put(`http://localhost:8800/${onEdit.id}`, {
+                .put("http://localhost:8800/" + onEdit.id, {
                     id: neighbordhood.id.value,
                     nome: neighbordhood.nome.value,
                 })

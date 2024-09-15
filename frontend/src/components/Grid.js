@@ -7,13 +7,15 @@ import axios from "axios"
 const Grid = ({ neighborhoods, setHoods, setOnEdit }) => {
 
     const handleEdit = (item) => {
+        console.log("Entrou na função de handleEdit")
         setOnEdit(item);
     };
 
 
     const handleDelete = async (id) => {
+        console.log("Entrou na função de handleDelete")
         await axios
-            .delete(`http://localhost:8800/${id}`)
+            .delete("http://localhost:8800/" + id)
             .then(({ data }) => {
                 const newArray = neighborhoods.filter((neighborhood) => neighborhood.id !== id);
 
