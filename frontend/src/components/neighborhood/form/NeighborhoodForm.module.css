@@ -1,29 +1,30 @@
 .formContainer {
     display: flex;
     align-items: flex-end;
-    gap: 10px;
+    gap: 20px;
     flex-wrap: wrap;
     background-color: #fff;
     padding: 20px;
     box-shadow: 0px 0px 5px #ccc;
     border-radius: 5px;
+    margin-top: 30px;
 }
-
 .inputArea {
     display: flex;
     flex-direction: column;
 }
 
 .inputCode {
-    width: 80px;
+    width: 65px;
     padding: 0 10px;
     border: 1px solid #bbb;
     border-radius: 5px;
     height: 40px;
+    text-align: center;
 }
 
 .inputName {
-    width: 300px;
+    width: 180px;
     padding: 0 10px;
     border: 1px solid #bbb;
     border-radius: 5px;

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import styles from "./Hood.module.css";
+import styles from "./NeighborhoodForm.module.css";
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import axios from "axios"
 import { toast } from "react-toastify";
 
 
-const Form = ({getHoods, onEdit, setOnEdit }) => {
+const NeighborhoodForm = ({getHoods, onEdit, setOnEdit }) => {
     const ref = useRef();
 
     useEffect(() => {
@@ -34,7 +34,7 @@ const Form = ({getHoods, onEdit, setOnEdit }) => {
 
         if (onEdit) {
             await axios
-                .put("http://localhost:8800/" + onEdit.id, {
+                .put("http://localhost:8800/neighborhoods/" + onEdit.id, {
                     id: neighbordhood.id.value,
                     nome: neighbordhood.nome.value,
                 })
@@ -42,7 +42,7 @@ const Form = ({getHoods, onEdit, setOnEdit }) => {
                 .catch(({ data }) => toast.error(data));
         } else {
             await axios
-                .post("http://localhost:8800", {
+                .post("http://localhost:8800/neighborhoods/", {
                     id: neighbordhood.id.value,
                     nome: neighbordhood.nome.value,
                 })
@@ -73,4 +73,4 @@ const Form = ({getHoods, onEdit, setOnEdit }) => {
     );
 };
 
-export default Form;
+export default NeighborhoodForm;

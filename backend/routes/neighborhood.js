@@ -2,14 +2,11 @@ import express from "express";
 import { getHood, addHood, updateHood, deleteHood } from "../controllers/neighborhood.js";
 
 
-const router = express.Router();
+const NeighborhoodRouter = express.Router();
 
-router.get("/", getHood)
+NeighborhoodRouter.get("/", getHood);
+NeighborhoodRouter.post("/", addHood);
+NeighborhoodRouter.put("/:id", updateHood);
+NeighborhoodRouter.delete("/:id", deleteHood);
 
-router.post("/", addHood)
-
-router.put("/:id", updateHood)
-
-router.delete("/:id", deleteHood)
-
-export default router
+export default NeighborhoodRouter

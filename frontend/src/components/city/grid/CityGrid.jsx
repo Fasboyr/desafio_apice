@@ -1,25 +1,23 @@
 import React from "react";
-import style from "./Grid.module.css";
+import style from "./CityGrid.module.css";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios"
 
-const Grid = ({ neighborhoods, setHoods, setOnEdit }) => {
+const CityGrid = ({ cities, setCities, setOnEdit }) => {
 
     const handleEdit = (item) => {
-        console.log("Entrou na função de handleEdit")
         setOnEdit(item);
     };
 
 
     const handleDelete = async (id) => {
-        console.log("Entrou na função de handleDelete")
         await axios
-            .delete("http://localhost:8800/" + id)
+            .delete("http://localhost:8800/cities/" + id)
             .then(({ data }) => {
-                const newArray = neighborhoods.filter((neighborhood) => neighborhood.id !== id);
+                const newArray = cities.filter((cities) => cities.id !== id);
 
-                setHoods(newArray);
+                setCities(newArray);
                 toast.success(data);
             })
             .catch(({ data }) => toast.error(data));
@@ -34,13 +32,15 @@ const Grid = ({ neighborhoods, setHoods, setOnEdit }) => {
                 <tr>
                     <th className={style.th}>Código</th>
                     <th className={style.th}>Nome</th>
+                    <th className={style.th}>Sigla UF</th>
                 </tr>
             </thead>
             <tbody className={style.tbody}>
-                {neighborhoods.map((item, i) => (
+                {cities.map((item, i) => (
                     <tr key={i} className={style.tr}>
-                        <td className={`${style.td} ${style.width15}`}>{item.id}</td>
-                        <td className={`${style.td} ${style.width30}`}>{item.nome}</td>
+                        <td className={`${style.td} ${style.widthId}`}>{item.id}</td>
+                        <td className={`${style.td} ${style.widthNome}`}>{item.nome}</td>
+                        <td className={`${style.td} ${style.widthSigla}`}>{item.sigla_uf}</td>
                         <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
                             <FaEdit onClick={() => handleEdit(item)} />
                         </td>
@@ -54,4 +54,4 @@ const Grid = ({ neighborhoods, setHoods, setOnEdit }) => {
     );
 };
 
-export default Grid;
+export default CityGrid;
