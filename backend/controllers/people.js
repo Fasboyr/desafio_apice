@@ -2,17 +2,19 @@ import { db } from "../db.js";
 
 export const getPeople = (_, res) => {
     const q = `
-        SELECT p.id, p.nome, p.telefone, c.nome AS cidade
+        SELECT p.id, p.nome, p.telefone, c.nome AS cidade, b.nome AS bairro
         FROM pessoas p
         JOIN cidades c ON p.id_cidade = c.id
+        JOIN bairros b ON p.id_bairro = b.id
     `;
 
     db.query(q, (err, data) => {
         if (err) return res.json(err);
 
         return res.status(200).json(data);
-    })
+    });
 };
+
 
 
 export const addPeople = (req, res) => {

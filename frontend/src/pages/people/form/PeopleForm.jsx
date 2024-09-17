@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./PeopleForm.module.css";
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
@@ -6,14 +6,62 @@ import { Dropdown } from 'primereact/dropdown';
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Card } from "primereact/card";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
-    const ref = useRef();
+    const location = useLocation();
     const [hoods, setHoods] = useState([]);
     const [cities, setCities] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedHood, setSelectedHood] = useState(null);
+    const [formData, setFormData] = useState({
+        id: '',
+        nome: '',
+        cidade:'',
+        bairro:'',
+        cep: '',
+        endereco: '',
+        numero: '',
+        complemento: '',
+        telefone: '',
+        email: ''
+    });
+
+    useEffect(() => {
+        getHoods();
+        getCities();
+    }, []);
+
+    useEffect(() => {
+        if (location.state && location.state.item) {
+            const item = location.state.item;
+            setFormData({
+                id: item.id,
+                nome: item.nome,
+                cidade: item.cidade,
+                bairro: item.bairro,
+                cep: item.cep,
+                endereco: item.endereco,
+                numero: item.numero,
+                complemento: item.complemento,
+                telefone: item.telefone,
+                email: item.email
+            });
+    
+            // Atualizar os valores selecionados após garantir que cities e hoods estão carregados
+            const updateSelectedValues = () => {
+                if (cities.length > 0) {
+                    setSelectedCity(cities.find(city => city.id === item.id_cidade) || null);
+                }
+                if (hoods.length > 0) {
+                    setSelectedHood(hoods.find(hood => hood.id === item.id_bairro) || null);
+                }
+            };
+            console.log("Cidade carregada no slectedCity:");
+            console.log(selectedCity);
+            updateSelectedValues();
+        }
+    }, [location.state, cities, hoods]);
 
     const getHoods = async () => {
         try {
@@ -33,44 +81,28 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
         }
     };
 
-    useEffect(() => {
-        getHoods();
-        getCities();
-    }, []);
-
-    useEffect(() => {
-        if (onEdit) {
-            const people = ref.current;
-
-            people.id.value = onEdit.id;
-            people.nome.value = onEdit.nome;
-            setSelectedCity(cities.find(city => city.id === onEdit.id_cidade));
-            setSelectedHood(hoods.find(hood => hood.id === onEdit.id_bairro));
-            people.cep.value = onEdit.cep;
-            people.endereco.value = onEdit.endereco;
-            people.numero.value = onEdit.numero;
-            people.complemento.value = onEdit.complemento;
-            people.telefone.value = onEdit.telefone;
-            people.email.value = onEdit.email;
-        }
-    }, [onEdit, cities, hoods]);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const people = ref.current;
-
         if (
-            !people.id.value ||
-            !people.nome.value ||
+            !formData.id ||
+            !formData.nome ||
             !selectedCity ||
             !selectedHood ||
-            !people.cep.value ||
-            !people.endereco.value ||
-            !people.numero.value ||
-            !people.complemento.value ||
-            !people.telefone.value ||
-            !people.email.value
+            !formData.cep ||
+            !formData.endereco ||
+            !formData.numero ||
+            !formData.complemento ||
+            !formData.telefone ||
+            !formData.email
         ) {
             return toast.warn("Preencha todos os campos!");
         }
@@ -79,47 +111,34 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
             const cityId = selectedCity.id;
             const hoodId = selectedHood.id;
 
-            if (onEdit) {
-                await axios.put("http://localhost:8800/people/" + onEdit.id, {
-                    id: people.id.value,
-                    nome: people.nome.value,
+            if (formData.id) {
+                await axios.put("http://localhost:8800/people/" + formData.id, {
+                    ...formData,
                     id_cidade: cityId,
-                    id_bairro: hoodId,
-                    cep: people.cep.value,
-                    endereco: people.endereco.value,
-                    numero: people.numero.value,
-                    complemento: people.complemento.value,
-                    telefone: people.telefone.value,
-                    email: people.email.value
+                    id_bairro: hoodId
                 });
                 toast.success("Pessoa atualizada com sucesso.");
             } else {
                 await axios.post("http://localhost:8800/people", {
-                    id: people.id.value,
-                    nome: people.nome.value,
+                    ...formData,
                     id_cidade: cityId,
-                    id_bairro: hoodId,
-                    cep: people.cep.value,
-                    endereco: people.endereco.value,
-                    numero: people.numero.value,
-                    complemento: people.complemento.value,
-                    telefone: people.telefone.value,
-                    email: people.email.value
+                    id_bairro: hoodId
                 });
                 toast.success("Pessoa adicionada com sucesso.");
             }
 
-            // Clear the form
-            people.id.value = "";
-            people.nome.value = "";
+            setFormData({
+                id: '',
+                nome: '',
+                cep: '',
+                endereco: '',
+                numero: '',
+                complemento: '',
+                telefone: '',
+                email: ''
+            });
             setSelectedCity(null);
             setSelectedHood(null);
-            people.cep.value = "";
-            people.endereco.value = "";
-            people.numero.value = "";
-            people.complemento.value = "";
-            people.telefone.value = "";
-            people.email.value = "";
 
             setOnEdit(null);
             getPeople();
@@ -130,30 +149,44 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
 
     return (
         <Card className={styles.card} title={<div className={styles.cardTitle}>Cadastro de Pessoas</div>}>
-            <form className={styles.formContainer} ref={ref} onSubmit={handleSubmit}>
+            <form className={styles.formContainer} onSubmit={handleSubmit}>
                 <div className={styles.inputRow}>
                     <div className={`${styles.inputArea} ${styles.inputAreaId}`}>
                         <label>Código</label>
-                        <InputText className={`${styles.input} ${styles.inputId}`} name="id" />
+                        <InputText
+                            className={`${styles.input} ${styles.inputId}`}
+                            name="id"
+                            value={formData.id}
+                            onChange={handleChange}
+                        />
                     </div>
                     <div className={`${styles.inputArea} ${styles.inputAreaNome}`}>
                         <label>Nome</label>
-                        <InputText className={`${styles.input} ${styles.inputNome}`} name="nome" />
+                        <InputText
+                            className={`${styles.input} ${styles.inputNome}`}
+                            name="nome"
+                            value={formData.nome}
+                            onChange={handleChange}
+                        />
                     </div>
                     <div className={`${styles.inputArea} ${styles.inputAreaTelefone}`}>
                         <label>Telefone</label>
-                        <InputText className={styles.input} name="telefone" />
+                        <InputText
+                            className={styles.input}
+                            name="telefone"
+                            value={formData.telefone}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
                 <div className={styles.inputRow}>
                     <div className={`${styles.inputArea} ${styles.inputAreaCidade}`}>
                         <label>Cidade</label>
                         <Dropdown
-                            value={selectedCity}
                             options={cities}
                             onChange={(e) => setSelectedCity(e.value)}
-                            optionLabel="nome"  // Exibe a propriedade 'nome' dos objetos de cidade
-                            placeholder="Selecione uma cidade"
+                            optionLabel="nome"
+                            placeholder={formData.cidade || "Selecione uma Cidade"}
                         />
                     </div>
                     <div className={`${styles.inputArea} ${styles.inputAreaBairro}`}>
@@ -162,40 +195,67 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                             value={selectedHood}
                             options={hoods}
                             onChange={(e) => setSelectedHood(e.value)}
-                            optionLabel="nome"  // Exibe a propriedade 'nome' dos objetos de bairro
-                            placeholder="Selecione um bairro"
+                            optionLabel="nome"
+                            placeholder={formData.bairro || "Selecione um Bairro"}
                         />
                     </div>
                     <div className={`${styles.inputArea} ${styles.inputAreaCEP}`}>
                         <label>CEP</label>
-                        <InputText className={styles.input} name="cep" />
+                        <InputText
+                            className={styles.input}
+                            name="cep"
+                            value={formData.cep}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
                 <div className={styles.inputRow}>
                     <div className={`${styles.inputArea} ${styles.inputAreaEndereço}`}>
                         <label>Endereço</label>
-                        <InputText className={styles.input} name="endereco" />
+                        <InputText
+                            className={styles.input}
+                            name="endereco"
+                            value={formData.endereco}
+                            onChange={handleChange}
+                        />
                     </div>
                     <div className={`${styles.inputArea} ${styles.inputAreaNumero}`}>
                         <label>Número</label>
-                        <InputText className={styles.input} name="numero" />
+                        <InputText
+                            className={styles.input}
+                            name="numero"
+                            value={formData.numero}
+                            onChange={handleChange}
+                        />
                     </div>
                     <div className={`${styles.inputArea} ${styles.inputAreaComplemento}`}>
                         <label>Complemento</label>
-                        <InputText className={styles.input} name="complemento" />
+                        <InputText
+                            className={styles.input}
+                            name="complemento"
+                            value={formData.complemento}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
                 <div className={styles.inputRow}>
                     <div className={`${styles.inputArea} ${styles.inputAreaEmail}`}>
                         <label>Email</label>
-                        <InputText className={`${styles.input} ${styles.inputEmail}`} name="email" />
+                        <InputText
+                            className={`${styles.input} ${styles.inputEmail}`}
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
 
-                <Link to="/people" className={styles.buttonContainer}>
-                    <Button className={`${styles.button} ${styles.cancelButton}`} label="CANCELAR" type="button" />
+                <div className={styles.buttonContainer}>
+                    <Link to="/people" className={styles.buttonContainer}>
+                        <Button className={`${styles.button} ${styles.cancelButton}`} label="CANCELAR" type="button" />
+                    </Link>
                     <Button className={`${styles.button} ${styles.saveButton}`} label="SALVAR" type="submit" />
-                </Link>
+                </div>
             </form>
         </Card>
     );

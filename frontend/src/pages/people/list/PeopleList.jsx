@@ -2,50 +2,41 @@ import React, { useEffect, useState } from "react";
 import style from "./PeopleList.module.css";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
-import axios from "axios"
+import axios from "axios";
 import { Card } from 'primereact/card';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const PeopleList = () => {
-
     const [people, setPeople] = useState([]);
-    const [onEdit, setOnEdit] = useState(null);
-
+    const navigate = useNavigate();
 
     const getPeople = async () => {
         try {
             const res = await axios.get("http://localhost:8800/people");
             setPeople(res.data.sort((a, b) => (a.nome > b.nome ? 1 : -1)));
         } catch (error) {
-            toast.error(error);
+            toast.error(error.message);
         }
-
-
     };
 
     useEffect(() => {
         getPeople();
-    }, [setPeople]);
+    }, []);
 
     const handleEdit = (item) => {
-        setOnEdit(item);
+        navigate('/pform', { state: { item } }); 
     };
-
+    
 
     const handleDelete = async (id) => {
-        await axios
-            .delete("http://localhost:8800/people/" + id)
-            .then(({ data }) => {
-                const newArray = people.filter((people) => people.id !== id);
-
-                setPeople(newArray);
-                toast.success(data);
-            })
-            .catch(({ data }) => toast.error(data));
-
-        setOnEdit(null);
+        try {
+            const { data } = await axios.delete("http://localhost:8800/people/" + id);
+            setPeople(people.filter((person) => person.id !== id));
+            toast.success(data);
+        } catch (error) {
+            toast.error(error.message);
+        }
     };
-
 
     return (
         <Card className={style.card}>
@@ -92,10 +83,7 @@ const PeopleList = () => {
                 </div>
             </div>
         </Card>
-
-
     );
-
 };
 
 export default PeopleList;
