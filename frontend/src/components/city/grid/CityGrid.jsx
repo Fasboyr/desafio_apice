@@ -38,9 +38,9 @@ const CityGrid = ({ cities, setCities, setOnEdit }) => {
             <tbody className={style.tbody}>
                 {cities.map((item, i) => (
                     <tr key={i} className={style.tr}>
-                        <td className={`${style.td} ${style.widthId}`}>{item.id}</td>
-                        <td className={`${style.td} ${style.widthNome}`}>{item.nome}</td>
-                        <td className={`${style.td} ${style.widthSigla}`}>{item.sigla_uf}</td>
+                        <td className={`${style.td} ${style.width15}`}>{item.id}</td>
+                        <td className={`${style.td} ${style.width30}`}>{item.nome}</td>
+                        <td className={`${style.td} ${style.width30}`}>{item.sigla_uf}</td>
                         <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
                             <FaEdit onClick={() => handleEdit(item)} />
                         </td>
