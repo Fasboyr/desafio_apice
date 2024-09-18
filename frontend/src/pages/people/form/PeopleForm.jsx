@@ -156,6 +156,7 @@ const PeopleForm = () => {
             });
             setSelectedCity(null);
             setSelectedHood(null);
+            setIsEdit(false);
 
         } catch (error) {
             toast.error("Ocorreu um erro ao salvar os dados.");
