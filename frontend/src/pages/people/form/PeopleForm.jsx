@@ -4,11 +4,12 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Card } from "primereact/card";
 import { Link, useLocation } from "react-router-dom";
 
-const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
+const PeopleForm = () => {
+
     const location = useLocation();
     const [hoods, setHoods] = useState([]);
     const [cities, setCities] = useState([]);
@@ -17,8 +18,10 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
     const [formData, setFormData] = useState({
         id: '',
         nome: '',
-        cidade:'',
-        bairro:'',
+        id_cidade: '',
+        id_bairro: '',
+        cidade: '',
+        bairro: '',
         cep: '',
         endereco: '',
         numero: '',
@@ -26,6 +29,8 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
         telefone: '',
         email: ''
     });
+
+    const [isEdit, setIsEdit] = useState(false);
 
     useEffect(() => {
         getHoods();
@@ -47,19 +52,17 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                 telefone: item.telefone,
                 email: item.email
             });
-    
-            // Atualizar os valores selecionados após garantir que cities e hoods estão carregados
+
+            setIsEdit(true);
+
             const updateSelectedValues = () => {
-                if (cities.length > 0) {
-                    setSelectedCity(cities.find(city => city.id === item.id_cidade) || null);
-                }
-                if (hoods.length > 0) {
-                    setSelectedHood(hoods.find(hood => hood.id === item.id_bairro) || null);
-                }
+                setSelectedCity(cities.find(city => city.id === item.id_cidade) || null);
+                setSelectedHood(hoods.find(hood => hood.id === item.id_bairro) || null);
+
             };
-            console.log("Cidade carregada no slectedCity:");
-            console.log(selectedCity);
             updateSelectedValues();
+        } else {
+            setIsEdit(false);
         }
     }, [location.state, cities, hoods]);
 
@@ -91,12 +94,10 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (
-            !formData.id ||
             !formData.nome ||
-            !selectedCity ||
-            !selectedHood ||
+            !(selectedCity || formData.id_cidade) ||
+            !(selectedHood || formData.id_bairro) ||
             !formData.cep ||
             !formData.endereco ||
             !formData.numero ||
@@ -105,24 +106,38 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
             !formData.email
         ) {
             return toast.warn("Preencha todos os campos!");
+
         }
 
         try {
             const cityId = selectedCity.id;
             const hoodId = selectedHood.id;
-
-            if (formData.id) {
+            if (isEdit) {
                 await axios.put("http://localhost:8800/people/" + formData.id, {
-                    ...formData,
+                    id: formData.id,
+                    nome: formData.nome,
                     id_cidade: cityId,
-                    id_bairro: hoodId
+                    id_bairro: hoodId,
+                    cep: formData.cep,
+                    endereco: formData.endereco,
+                    numero: formData.numero,
+                    complemento: formData.complemento,
+                    telefone: formData.telefone,
+                    email: formData.email
                 });
                 toast.success("Pessoa atualizada com sucesso.");
             } else {
                 await axios.post("http://localhost:8800/people", {
-                    ...formData,
+                    id: formData.id,
+                    nome: formData.nome,
                     id_cidade: cityId,
-                    id_bairro: hoodId
+                    id_bairro: hoodId,
+                    cep: formData.cep,
+                    endereco: formData.endereco,
+                    numero: formData.numero,
+                    complemento: formData.complemento,
+                    telefone: formData.telefone,
+                    email: formData.email
                 });
                 toast.success("Pessoa adicionada com sucesso.");
             }
@@ -130,6 +145,8 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
             setFormData({
                 id: '',
                 nome: '',
+                cidade: '',
+                bairro: '',
                 cep: '',
                 endereco: '',
                 numero: '',
@@ -140,13 +157,10 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
             setSelectedCity(null);
             setSelectedHood(null);
 
-            setOnEdit(null);
-            getPeople();
         } catch (error) {
             toast.error("Ocorreu um erro ao salvar os dados.");
         }
     };
-
     return (
         <Card className={styles.card} title={<div className={styles.cardTitle}>Cadastro de Pessoas</div>}>
             <form className={styles.formContainer} onSubmit={handleSubmit}>
@@ -156,7 +170,7 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                         <InputText
                             className={`${styles.input} ${styles.inputId}`}
                             name="id"
-                            value={formData.id}
+                            value={formData.id || ""}
                             onChange={handleChange}
                         />
                     </div>
@@ -165,7 +179,7 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                         <InputText
                             className={`${styles.input} ${styles.inputNome}`}
                             name="nome"
-                            value={formData.nome}
+                            value={formData.nome || ""}
                             onChange={handleChange}
                         />
                     </div>
@@ -174,7 +188,7 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                         <InputText
                             className={styles.input}
                             name="telefone"
-                            value={formData.telefone}
+                            value={formData.telefone || ""}
                             onChange={handleChange}
                         />
                     </div>
@@ -183,6 +197,7 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                     <div className={`${styles.inputArea} ${styles.inputAreaCidade}`}>
                         <label>Cidade</label>
                         <Dropdown
+                            value={selectedCity}
                             options={cities}
                             onChange={(e) => setSelectedCity(e.value)}
                             optionLabel="nome"
@@ -204,7 +219,7 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                         <InputText
                             className={styles.input}
                             name="cep"
-                            value={formData.cep}
+                            value={formData.cep || ""}
                             onChange={handleChange}
                         />
                     </div>
@@ -215,7 +230,7 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                         <InputText
                             className={styles.input}
                             name="endereco"
-                            value={formData.endereco}
+                            value={formData.endereco || ""}
                             onChange={handleChange}
                         />
                     </div>
@@ -224,7 +239,7 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                         <InputText
                             className={styles.input}
                             name="numero"
-                            value={formData.numero}
+                            value={formData.numero || ""}
                             onChange={handleChange}
                         />
                     </div>
@@ -233,7 +248,7 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                         <InputText
                             className={styles.input}
                             name="complemento"
-                            value={formData.complemento}
+                            value={formData.complemento || ""}
                             onChange={handleChange}
                         />
                     </div>
@@ -244,7 +259,7 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                         <InputText
                             className={`${styles.input} ${styles.inputEmail}`}
                             name="email"
-                            value={formData.email}
+                            value={formData.email || ""}
                             onChange={handleChange}
                         />
                     </div>
@@ -257,6 +272,7 @@ const PeopleForm = ({ getPeople, onEdit, setOnEdit }) => {
                     <Button className={`${styles.button} ${styles.saveButton}`} label="SALVAR" type="submit" />
                 </div>
             </form>
+            <ToastContainer autoClose={3000} position="bottom-left" />
         </Card>
     );
 };

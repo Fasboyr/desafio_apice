@@ -2,7 +2,7 @@ import { db } from "../db.js";
 
 export const getPeople = (_, res) => {
     const q = `
-        SELECT p.id, p.nome, p.telefone, c.nome AS cidade, b.nome AS bairro
+        SELECT p.id, p.nome, p.id_cidade, p.id_bairro, p.cep, p.endereco, p.numero, p.complemento, p.telefone, p.email, c.nome AS cidade, b.nome AS bairro
         FROM pessoas p
         JOIN cidades c ON p.id_cidade = c.id
         JOIN bairros b ON p.id_bairro = b.id
