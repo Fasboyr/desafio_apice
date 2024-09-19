@@ -7,6 +7,7 @@ import City from './pages/city/City.jsx';
 import PeopleList from './pages/people/list/PeopleList.jsx';
 import PeopleForm from './pages/people/form/PeopleForm.jsx';
 import Product from './pages/product/Product.jsx';
+import SalesList from './pages/sale/list/SaleList.jsx';
 
 
 
@@ -21,6 +22,7 @@ function App() {
           <Route path='/people' element={<DefaultLayout><PeopleList /></DefaultLayout>} />
           <Route path='/pform' element={<DefaultLayout><PeopleForm /></DefaultLayout>} />
           <Route path='/products' element={<DefaultLayout><Product /></DefaultLayout>} />
+          <Route path='/sales' element={<DefaultLayout><SalesList /></DefaultLayout>} />
         </Routes>
       </BrowserRouter>
     </div>
