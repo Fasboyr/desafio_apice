@@ -24,7 +24,7 @@ const SalesList = () => {
     }, []);
 
     const handleEdit = (item) => {
-        navigate('/pform', { state: { item } }); 
+        navigate('/sform', { state: { item } }); 
     };
     
 
@@ -44,7 +44,7 @@ const SalesList = () => {
                 <div className={style.cardTitle}>Vendas</div>
             </div>
             <div className={style.buttonContainer}>
-                <Link to="/pform" className={style.addButtonLink}>
+                <Link to="/sform" className={style.addButtonLink}>
                     <button className={style.addButton}>Adicionar</button>
                 </Link>
             </div>

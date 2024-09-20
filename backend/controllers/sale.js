@@ -2,7 +2,9 @@ import { db } from "../db.js";
 
 export const getSale = (_, res) => {
     const q = `
-        SELECT v.id, v.total_venda, v.id_pessoa, v.data_venda, p.nome AS pessoa
+        SELECT v.id, v.total_venda, v.id_pessoa, 
+               DATE_FORMAT(v.data_venda, '%d/%m/%Y') AS data_venda, 
+               p.nome AS pessoa
         FROM vendas v
         JOIN pessoas p ON v.id_pessoa = p.id
     `;
@@ -20,13 +22,13 @@ export const addSale = (req, res) => {
     const q = `
         INSERT INTO vendas (
             id, total_venda, id_pessoa, data_venda
-        ) VALUES (?, ?, ?, ?)`;
+        ) VALUES (?, ?, ?, STR_TO_DATE(?, '%d/%m/%Y'))`;
 
     const values = [
         req.body.id,
         req.body.total_venda,
         req.body.id_pessoa,
-        req.body.data_venda,
+        req.body.data_venda, 
     ];
 
     db.query(q, values, (err) => {
@@ -38,13 +40,18 @@ export const addSale = (req, res) => {
 
 
 
+
 export const updateSale = (req, res) => {
-    const q = "UPDATE vendas SET `id` = ?, `total_venda` = ?, `id_pessoa` = ?, `data_venda` = ? WHERE `id` = ?";
+    const q = `
+        UPDATE vendas 
+        SET id = ?, total_venda = ?, id_pessoa = ?, data_venda = STR_TO_DATE(?, '%d/%m/%Y') 
+        WHERE id = ?`;
 
     const values = [
+        req.body.id,
         req.body.total_venda,
         req.body.id_pessoa,
-        req.body.data_venda,
+        req.body.data_venda, 
     ];
 
     db.query(q, [...values, req.params.id], (err) => {

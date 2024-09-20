@@ -1,0 +1,190 @@
+.card {
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 1000px;
+    margin: 160px auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.cardTitle {
+    justify-content: center;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.inputRow {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+.inputArea {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    flex: 1;
+
+
+}
+
+.input {
+    width: 100%;
+    padding: 0 10px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+
+.inputAreaId {
+    width: 90px;
+    flex: 0 0 auto;
+
+}
+
+.inputAreaData {
+    width: 20%; /* Ajuste este valor conforme necessário */
+    flex: 0 0 auto; /* Para garantir que não cresça além do necessário */
+}
+
+.inputAreaPessoa {
+    flex: 1; 
+}
+
+
+.inputAreaTelefone {
+    width: 20%;
+    flex: 0 0 auto;
+}
+
+
+.inputAreaCEP {
+    width: 15%;
+    flex: 0 0 auto;
+}
+
+.inputAreaEndereço {
+    width: 39.5%;
+    flex: 0 0 auto;
+}
+
+.inputAreaNumero {
+    width: 20%;
+    flex: 0 0 auto;
+    margin-left: 30px;
+}
+
+.inputAreaComplemento {
+    width: 20%;
+    flex: 0 0 auto;
+    margin-left: 30px;
+}
+
+
+.inputAreaEmail {
+    width: 50%;
+    flex: 0 0 auto;
+
+}
+
+.buttonShop {
+    padding-top: 15px;
+}
+
+
+.shopButton{
+    background-color: #1a1c4d;
+}
+
+.shopButton:hover {
+    background-color: #03041a; 
+}
+
+.inputAreaTotal{
+    margin-top: -15px;
+}
+.inputTotal{
+    width: 30%;
+}
+.button {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    background-color: #2c73d2;
+    color: white;
+    height: 42px;
+}
+
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 10px;
+}
+
+.cancelButton {
+    background-color: #f44336;
+}
+
+.cancelButton:hover {
+    background-color: #c62828; 
+}
+.saveButton {
+    background-color: #4caf50;
+}
+
+.saveButton:hover {
+    background-color: #388e3c; 
+}
+
+
+
+.table {
+    width: 100%;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0px 0px 5px #ccc;
+    border-radius: 5px;
+    max-width: 1120px;
+    margin: 20px auto;
+    word-break: break-all;
+    margin-top: 30px;
+}
+
+.th {
+    text-align: center;
+    border-bottom: inset;
+    padding-bottom: 5px;
+}
+
+.td {
+    padding-top: 15px;
+    text-align: center;
+    width: auto;
+}
+
+
+.alignCenter {
+    text-align: center;
+}
+
+.th,
+.td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}

@@ -8,6 +8,7 @@ import PeopleList from './pages/people/list/PeopleList.jsx';
 import PeopleForm from './pages/people/form/PeopleForm.jsx';
 import Product from './pages/product/Product.jsx';
 import SalesList from './pages/sale/list/SaleList.jsx';
+import SalesForm from './pages/sale/form/SaleForm.jsx';
 
 
 
@@ -23,6 +24,7 @@ function App() {
           <Route path='/pform' element={<DefaultLayout><PeopleForm /></DefaultLayout>} />
           <Route path='/products' element={<DefaultLayout><Product /></DefaultLayout>} />
           <Route path='/sales' element={<DefaultLayout><SalesList /></DefaultLayout>} />
+          <Route path='/sform' element={<DefaultLayout><SalesForm /></DefaultLayout>} />
         </Routes>
       </BrowserRouter>
     </div>
