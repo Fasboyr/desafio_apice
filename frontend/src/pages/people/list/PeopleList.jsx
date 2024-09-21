@@ -5,10 +5,24 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { Card } from 'primereact/card';
 import { Link, useNavigate } from "react-router-dom";
+import { Dropdown } from "primereact/dropdown";
+import { InputText } from "primereact/inputtext";
 
 const PeopleList = () => {
     const [people, setPeople] = useState([]);
+    const [hoods, setHoods] = useState([]);
+    const [cities, setCities] = useState([]);
+    const [selectedFilter, setSelectedFilter] = useState(null);
+    const [selectedName, setSelectedName] = useState("");
+    const [selectedCity, setSelectedCity] = useState(null);
+    const [selectedHood, setSelectedHood] = useState(null);
     const navigate = useNavigate();
+
+    const filterOptions = [
+        { label: 'Parte do nome', value: 'name' },
+        { label: 'Cidade', value: 'city' },
+        { label: 'Bairro', value: 'neighborhood' }
+    ];
 
     const getPeople = async () => {
         try {
@@ -19,14 +33,33 @@ const PeopleList = () => {
         }
     };
 
+    const getHoods = async () => {
+        try {
+            const res = await axios.get("http://localhost:8800/neighborhoods");
+            setHoods(res.data.sort((a, b) => (a.nome > b.nome ? 1 : -1)));
+        } catch (error) {
+            toast.error(error);
+        }
+    };
+
+    const getCities = async () => {
+        try {
+            const res = await axios.get("http://localhost:8800/cities");
+            setCities(res.data.sort((a, b) => (a.nome > b.nome ? 1 : -1)));
+        } catch (error) {
+            toast.error(error);
+        }
+    };
+
     useEffect(() => {
         getPeople();
+        getHoods();
+        getCities();
     }, []);
 
     const handleEdit = (item) => {
-        navigate('/pform', { state: { item } }); 
+        navigate('/pform', { state: { item } });
     };
-    
 
     const handleDelete = async (id) => {
         try {
@@ -38,12 +71,90 @@ const PeopleList = () => {
         }
     };
 
+    const filterAndSortPeople = () => {
+        let filteredPeople = [...people];
+
+        console.log("Selected City:", selectedCity);
+        console.log("People:", people);
+
+        if (selectedFilter === 'name' && selectedName) {
+            filteredPeople = filteredPeople.filter(person =>
+                person.nome.toLowerCase().includes(selectedName.toLowerCase())
+            );
+        }
+
+        if (selectedFilter === 'city' && selectedCity) {
+            filteredPeople = filteredPeople.filter(person =>
+                person.id_cidade === selectedCity 
+            );
+        }
+
+        if (selectedFilter === 'neighborhood' && selectedHood) {
+            filteredPeople = filteredPeople.filter(person =>
+                person.id_bairro === selectedHood 
+            );
+        }
+
+        return filteredPeople.sort((a, b) => (a.nome > b.nome ? 1 : -1));
+    };
+
     return (
         <Card className={style.card}>
             <div className={style.cardHeader}>
                 <div className={style.cardTitle}>Pessoas</div>
             </div>
             <div className={style.buttonContainer}>
+                <div className={style.filterContainer}>
+                    <div className={`${style.filterDropdown} ${selectedFilter === 'city' || selectedFilter === 'neighborhood' ? style.cityOrHoodFilter : style.noFilterOrNameActive}`}>
+                        <Dropdown
+                            id="filterDropdown"
+                            value={selectedFilter}
+                            options={filterOptions}
+                            onChange={(e) => {
+                                setSelectedFilter(e.value);
+                                setSelectedCity(null);
+                                setSelectedHood(null);
+                                setSelectedName(""); 
+                            }}
+                            placeholder="Filtrar a lista por:"
+                        />
+                    </div>
+
+                    {selectedFilter === 'name' && (
+                        <div className={style.nameInputContainer}>
+                            <InputText
+                                type="text"
+                                value={selectedName}
+                                onChange={(e) => setSelectedName(e.target.value)}
+                                placeholder="Digite o nome"
+                                className={style.nameInput}
+                            />
+                        </div>
+                    )}
+
+                    {selectedFilter === 'city' && (
+                        <div className={style.cityDropdown}>
+                            <Dropdown
+                                value={selectedCity}
+                                options={cities.map(city => ({ label: city.nome, value: city.id }))}
+                                onChange={(e) => setSelectedCity(e.value)}
+                                placeholder="Selecione uma cidade"
+                            />
+                        </div>
+                    )}
+
+                    {selectedFilter === 'neighborhood' && (
+                        <div className={style.neighborhoodDropdown}>
+                            <Dropdown
+                                value={selectedHood}
+                                options={hoods.map(hood => ({ label: hood.nome, value: hood.id }))}
+                                onChange={(e) => setSelectedHood(e.value)}
+                                placeholder="Selecione um bairro"
+                            />
+                        </div>
+                    )}
+                </div>
+
                 <Link to="/pform" className={style.addButtonLink}>
                     <button className={style.addButton}>Adicionar</button>
                 </Link>
@@ -58,12 +169,12 @@ const PeopleList = () => {
                                     <th className={style.th}>Nome</th>
                                     <th className={style.th}>Cidade</th>
                                     <th className={style.th}>Telefone</th>
-                                    <th className={style.th}></th> {/* Coluna extra para os ícones */}
-                                    <th className={style.th}></th> {/* Coluna extra para os ícones */}
+                                    <th className={style.th}></th>
+                                    <th className={style.th}></th>
                                 </tr>
                             </thead>
                             <tbody className={style.tbody}>
-                                {people.map((item, i) => (
+                                {filterAndSortPeople().map((item, i) => (
                                     <tr key={i} className={style.tr}>
                                         <td className={`${style.td} ${style.widthId}`}>{item.id}</td>
                                         <td className={`${style.td} ${style.widthNome}`}>{item.nome}</td>

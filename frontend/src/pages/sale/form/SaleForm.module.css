@@ -51,8 +51,8 @@
 }
 
 .inputAreaData {
-    width: 20%; /* Ajuste este valor conforme necessário */
-    flex: 0 0 auto; /* Para garantir que não cresça além do necessário */
+    width: 20%;
+    flex: 0 0 auto; 
 }
 
 .inputAreaPessoa {

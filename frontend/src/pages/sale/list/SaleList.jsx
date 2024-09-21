@@ -7,6 +7,23 @@ import { Card } from 'primereact/card';
 import { Link, useNavigate } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from 'primereact/calendar';
+import { InputText } from "primereact/inputtext";
+
+import { addLocale } from 'primereact/api';
+
+addLocale('pt-BR', {
+    firstDayOfWeek: 0,
+    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    today: 'Hoje',
+    clear: 'Limpar',
+    weekHeader: 'Semana',
+    dateFormat: 'dd/mm/yy',
+    strong: 'Forte',
+});
 
 
 const SalesList = () => {
@@ -47,7 +64,7 @@ const SalesList = () => {
     const getItems = async () => {
         try {
             const res = await axios.get("http://localhost:8800/saleItens/");
-            setItems(res.data); 
+            setItems(res.data);
         } catch (error) {
             toast.error(error.message);
         }
@@ -76,16 +93,14 @@ const SalesList = () => {
         if (selectedFilter === 'date' && startDate && endDate) {
             filteredSales = filteredSales.filter(sale => {
                 const [day, month, year] = sale.data_venda.split('/');
-                const saleDate = new Date(year, month - 1, day); 
-        
+                const saleDate = new Date(year, month - 1, day);
+
                 const start = new Date(startDate);
                 const end = new Date(endDate);
-                
+
                 return saleDate >= start && saleDate <= end;
             });
         }
-        
-        
 
         return filteredSales.sort((a, b) => (a.pessoa > b.pessoa ? 1 : -1));
     };
@@ -107,6 +122,12 @@ const SalesList = () => {
     const uniquePeople = Array.from(new Set(sales.map(sale => sale.pessoa)))
         .map(pessoa => ({ label: pessoa, value: pessoa }));
 
+    const formatToCurrency = (value) => {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+    };
+
+    const totalSales = filterAndSortSales().reduce((total, sale) => total + sale.total_venda, 0);
+
     return (
         <Card className={style.card}>
             <div className={style.cardHeader}>
@@ -115,7 +136,6 @@ const SalesList = () => {
             <div className={style.buttonContainer}>
                 <div className={`${style.filterDropdown} ${selectedFilter === 'person' || selectedFilter === 'product' ? style.activeFilters : style.noFilterOrDateActive}`}>
                     <Dropdown
-                        id="filterDropdown"
                         value={selectedFilter}
                         options={filterOptions}
                         onChange={(e) => {
@@ -182,7 +202,7 @@ const SalesList = () => {
                                 <tr>
                                     <th className={style.th}>Código</th>
                                     <th className={style.th}>Cliente</th>
-                                    <th className={style.th}>Total de Venda (R$)</th>
+                                    <th className={style.th}>Total de Venda</th>
                                     <th className={style.th}></th>
                                     <th className={style.th}></th>
                                 </tr>
@@ -192,7 +212,7 @@ const SalesList = () => {
                                     <tr key={i} className={style.tr}>
                                         <td className={`${style.td} ${style.widthId}`}>{item.id}</td>
                                         <td className={`${style.td} ${style.widthNome}`}>{item.pessoa}</td>
-                                        <td className={`${style.td} ${style.widthCidade}`}>{item.total_venda}</td>
+                                        <td className={`${style.td} ${style.widthCidade}`}>{formatToCurrency(item.total_venda)}</td>
                                         <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
                                             <FaEdit onClick={() => handleEdit(item)} />
                                         </td>
@@ -203,6 +223,19 @@ const SalesList = () => {
                                 ))}
                             </tbody>
                         </table>
+
+                    </div>
+                </div>
+                <div className={style.totalContainer}>
+                    <div className={style.inputAreaTotal}>
+                        <label htmlFor="valorTotal" className={style.label}>Total Final:</label>
+                        <InputText
+                            id="valorTotal"
+                            className={`${style.input} ${style.inputTotal}`}
+                            name="total_venda"
+                            value={formatToCurrency(totalSales)}
+                            readOnly
+                        />
                     </div>
                 </div>
             </div>

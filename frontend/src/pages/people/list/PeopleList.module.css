@@ -17,13 +17,63 @@
     font-size: 24px;
     font-weight: bold;
     flex: 1;
-    text-align: center; /* Centraliza o título */
+    text-align: center; 
 }
 
 .buttonContainer {
-    text-align: right;
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
 }
+.filterContainer {
+    display: flex;
+    flex-direction: row; 
+    gap: 10px; 
+    align-items: center; 
+}
+
+.filterDropdown {
+    flex: 1; 
+    min-width: 150px; 
+}
+
+
+.cityOrHoodFilter {
+    max-width: 140px; 
+}
+
+.noFilterOrNameActive {
+    max-width: 190px; 
+}
+.nameInputContainer {
+    flex: 1; 
+    max-width: 250px;
+    margin-left: 30px; 
+}
+
+
+.cityDropdown,
+.neighborhoodDropdown {
+    flex: 1; 
+    min-width: 150px; 
+}
+
+.p-dropdown {
+    width: 100%; 
+}
+
+
+.cityOrHoodFilter {
+    max-width: 50px;
+   
+}
+.noFilterOrNameActive {
+    max-width: 40px;
+   
+}
+
+
 
 .addButton {
     padding: 10px 20px;
