@@ -5,10 +5,26 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { Card } from 'primereact/card';
 import { Link, useNavigate } from "react-router-dom";
+import { Dropdown } from "primereact/dropdown";
+import { Calendar } from 'primereact/calendar';
+
 
 const SalesList = () => {
     const [sales, setSales] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [items, setItems] = useState([]);
+    const [selectedFilter, setSelectedFilter] = useState(null);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [selectedPerson, setSelectedPerson] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const navigate = useNavigate();
+
+    const filterOptions = [
+        { label: 'Período de Venda', value: 'date' },
+        { label: 'Pessoa', value: 'person' },
+        { label: 'Produto', value: 'product' }
+    ];
 
     const getSales = async () => {
         try {
@@ -19,14 +35,64 @@ const SalesList = () => {
         }
     };
 
+    const getProducts = async () => {
+        try {
+            const res = await axios.get("http://localhost:8800/products");
+            setProducts(res.data.sort((a, b) => (a.nome > b.nome ? 1 : -1)));
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
+
+    const getItems = async () => {
+        try {
+            const res = await axios.get("http://localhost:8800/saleItens/");
+            setItems(res.data); 
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
+
     useEffect(() => {
         getSales();
+        getProducts();
+        getItems();
     }, []);
 
-    const handleEdit = (item) => {
-        navigate('/sform', { state: { item } }); 
+    const filterAndSortSales = () => {
+        let filteredSales = [...sales];
+
+        if (selectedFilter === 'person' && selectedPerson) {
+            filteredSales = filteredSales.filter(sale => sale.pessoa === selectedPerson);
+        }
+
+        if (selectedFilter === 'product' && selectedProduct) {
+            const salesWithSelectedProduct = items
+                .filter(item => item.id_produto === selectedProduct)
+                .map(item => item.id_venda);
+            filteredSales = filteredSales.filter(sale => salesWithSelectedProduct.includes(sale.id));
+        }
+
+        if (selectedFilter === 'date' && startDate && endDate) {
+            filteredSales = filteredSales.filter(sale => {
+                const [day, month, year] = sale.data_venda.split('/');
+                const saleDate = new Date(year, month - 1, day); 
+        
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                
+                return saleDate >= start && saleDate <= end;
+            });
+        }
+        
+        
+
+        return filteredSales.sort((a, b) => (a.pessoa > b.pessoa ? 1 : -1));
     };
-    
+
+    const handleEdit = (item) => {
+        navigate('/sform', { state: { item } });
+    };
 
     const handleDelete = async (id) => {
         try {
@@ -38,12 +104,72 @@ const SalesList = () => {
         }
     };
 
+    const uniquePeople = Array.from(new Set(sales.map(sale => sale.pessoa)))
+        .map(pessoa => ({ label: pessoa, value: pessoa }));
+
     return (
         <Card className={style.card}>
             <div className={style.cardHeader}>
                 <div className={style.cardTitle}>Vendas</div>
             </div>
             <div className={style.buttonContainer}>
+                <div className={`${style.filterDropdown} ${selectedFilter === 'person' || selectedFilter === 'product' ? style.activeFilters : style.noFilterOrDateActive}`}>
+                    <Dropdown
+                        id="filterDropdown"
+                        value={selectedFilter}
+                        options={filterOptions}
+                        onChange={(e) => {
+                            setSelectedFilter(e.value);
+                            setSelectedPerson(null);
+                            setSelectedProduct(null);
+                        }}
+                        placeholder="Filtrar a lista por:"
+                    />
+                </div>
+
+                {selectedFilter === 'person' && (
+                    <div className={style.personDropdown}>
+                        <Dropdown
+                            value={selectedPerson}
+                            options={uniquePeople}
+                            onChange={(e) => setSelectedPerson(e.value)}
+                            placeholder="Selecione uma pessoa"
+                        />
+                    </div>
+                )}
+
+                {selectedFilter === 'product' && (
+                    <div className={style.productDropdown}>
+                        <Dropdown
+                            className={style.fixedDropdown}
+                            value={selectedProduct}
+                            options={products.map(product => ({ label: product.nome, value: product.id }))}
+                            onChange={(e) => setSelectedProduct(e.value)}
+                            placeholder="Selecione um produto"
+                        />
+                    </div>
+                )}
+
+                {selectedFilter === 'date' && (
+                    <div className={style.dateContainer}>
+                        <Calendar
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.value)}
+                            placeholder="Data Inicial"
+                            locale="pt-BR"
+                            dateFormat="dd/mm/yy"
+                        />
+                        <span className={style.dateSeparator}>à</span>
+                        <Calendar
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.value)}
+                            placeholder="Data Final"
+                            locale="pt-BR"
+                            dateFormat="dd/mm/yy"
+                        />
+                    </div>
+                )}
+
                 <Link to="/sform" className={style.addButtonLink}>
                     <button className={style.addButton}>Adicionar</button>
                 </Link>
@@ -57,12 +183,12 @@ const SalesList = () => {
                                     <th className={style.th}>Código</th>
                                     <th className={style.th}>Cliente</th>
                                     <th className={style.th}>Total de Venda (R$)</th>
-                                    <th className={style.th}></th> {/* Coluna extra para os ícones */}
-                                    <th className={style.th}></th> {/* Coluna extra para os ícones */}
+                                    <th className={style.th}></th>
+                                    <th className={style.th}></th>
                                 </tr>
                             </thead>
                             <tbody className={style.tbody}>
-                                {sales.map((item, i) => (
+                                {filterAndSortSales().map((item, i) => (
                                     <tr key={i} className={style.tr}>
                                         <td className={`${style.td} ${style.widthId}`}>{item.id}</td>
                                         <td className={`${style.td} ${style.widthNome}`}>{item.pessoa}</td>

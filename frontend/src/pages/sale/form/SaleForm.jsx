@@ -6,10 +6,11 @@ import { Dropdown } from 'primereact/dropdown';
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Card } from "primereact/card";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { FaEdit, FaShoppingCart, FaTrash } from "react-icons/fa";
 
 const SalesForm = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const [people, setPeople] = useState([]);
     const [product, setProduct] = useState([]);
@@ -187,19 +188,11 @@ const SalesForm = () => {
 
     const handleSaveItens = async () => {
         for (const items of item) {
-            console.log("Produto " + items.produto)
-            console.log("Editado ?" + items.wasEdited)
-            console.log("Novo?" + items.isNew)
-            console.log("Quantidade: " + items.qtde)
-            console.log("Total: " + items.vr_item)
             if (items.isNew) {
                 await axios.post("http://localhost:8800/saleItens", {
                     ...items,
                 });
             } else if (items.wasEdited) {
-                console.log("Entrou no update")
-                console.log("Id da venda" + items.id_venda)
-                console.log("Id do produto" + items.id_produto)
                 await axios.put(`http://localhost:8800/saleItens/${items.id_venda}/${items.id_produto}`, {
                     ...items,
                 });
@@ -285,6 +278,7 @@ const SalesForm = () => {
             });
             setSelectedPerson(null);
             setIsEdit(false);
+            navigate('/sales');
         } catch (error) {
             toast.error("Ocorreu um erro ao salvar os dados.");
             console.log(error);
