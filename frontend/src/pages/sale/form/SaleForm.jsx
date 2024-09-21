@@ -101,7 +101,6 @@ const SalesForm = () => {
                 wasEdited: false,
                 isNew: false
             }));
-            // Ordena os itens pelo id_produto
             updatedItems.sort((a, b) => a.id_produto - b.id_produto);
             setItem(updatedItems);
         } catch (error) {
@@ -116,6 +115,15 @@ const SalesForm = () => {
             ...formData,
             [name]: value
         });
+    };
+
+    const handleProductChange = (e) => {
+        const selected = e.value;
+        setSelectedProduct(selected);
+        setFormData(prev => ({
+            ...prev,
+            vr_venda: prev.vr_venda || selected.vr_venda
+        }));
     };
 
     const handleEditItem = (itemToEdit) => {
@@ -140,7 +148,7 @@ const SalesForm = () => {
             const updatedItem = {
                 ...item[existingItemIndex],
                 qtde: formData.qtde,
-                preco_unitario: selectedProduct.vr_venda,
+                preco_unitario: formData.vr_venda,
                 vr_item: formData.vr_item,
                 wasEdited: true,
             };
@@ -150,6 +158,7 @@ const SalesForm = () => {
             newItems[existingItemIndex] = updatedItem;
             setItem(newItems);
 
+
             toast.success("Item editado no carrinho.");
         } else {
             const newItem = {
@@ -157,7 +166,7 @@ const SalesForm = () => {
                 id_produto: selectedProduct.id,
                 produto: selectedProduct.nome,
                 qtde: formData.qtde,
-                preco_unitario: selectedProduct.vr_venda,
+                preco_unitario: formData.vr_venda,
                 vr_item: formData.vr_item,
                 wasEdited: false,
                 isNew: true
@@ -170,26 +179,40 @@ const SalesForm = () => {
         setFormData(prev => ({
             ...prev,
             qtde: '',
-            vr_item: ''
+            vr_item: '',
+            vr_venda: ''
         }));
         setSelectedProduct(null);
     };
 
     const handleSaveItens = async () => {
         for (const items of item) {
+            console.log("Produto " + items.produto)
+            console.log("Editado ?" + items.wasEdited)
+            console.log("Novo?" + items.isNew)
+            console.log("Quantidade: " + items.qtde)
+            console.log("Total: " + items.vr_item)
             if (items.isNew) {
                 await axios.post("http://localhost:8800/saleItens", {
                     ...items,
-                    isNew: false,
                 });
             } else if (items.wasEdited) {
+                console.log("Entrou no update")
+                console.log("Id da venda" + items.id_venda)
+                console.log("Id do produto" + items.id_produto)
                 await axios.put(`http://localhost:8800/saleItens/${items.id_venda}/${items.id_produto}`, {
                     ...items,
-                    wasEdited: true,
                 });
             }
+            
+            await axios.put(`http://localhost:8800/products/${items.id_produto}`, {
+                id: items.id_produto,
+                nome: items.produto,
+                vr_venda: items.preco_unitario 
+            });
+            
         }
-         toast.success("Itens salvos com sucesso.");
+        toast.success("Itens salvos com sucesso.");
     };
 
 
@@ -205,17 +228,17 @@ const SalesForm = () => {
         }
     };
     const isValidItem = (item, currentIdVenda) => {
-        return item.id_venda === currentIdVenda && 
-               item.id_produto && 
-               item.produto && 
-               item.qtde && 
-               item.vr_item;
+        return item.id_venda === currentIdVenda &&
+            item.id_produto &&
+            item.produto &&
+            item.qtde &&
+            item.vr_item;
     };
-    
+
     const hasValidItems = (currentIdVenda) => {
         return item.some((i) => isValidItem(i, currentIdVenda));
     };
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (
@@ -225,7 +248,7 @@ const SalesForm = () => {
             !formData.data_venda
         ) {
             return toast.warn("Preencha todos os campos!");
-        }else if(!hasValidItems(formData.id)){
+        } else if (!hasValidItems(formData.id)) {
             return toast.warn("Preencha ao menos um item!");
         }
 
@@ -309,10 +332,11 @@ const SalesForm = () => {
                         <Dropdown
                             value={selectedProduct}
                             options={product}
-                            onChange={(e) => setSelectedProduct(e.value)}
+                            onChange={handleProductChange}
                             optionLabel="nome"
                             placeholder={"Selecione um Produto"}
                         />
+
                     </div>
                     <div className={`${styles.inputArea} ${styles.inputAreaCEP}`}>
                         <label>Nº de Itens</label>
@@ -328,9 +352,11 @@ const SalesForm = () => {
                         <InputText
                             className={styles.input}
                             name="vr_venda"
-                            value={'R$ ' + (formData.vr_venda || (selectedProduct ? selectedProduct.vr_venda : ""))}
+                            value={formData.vr_venda || ""}
                             onChange={handleChange}
+                            keyfilter="money"
                         />
+
                     </div>
                     <div className={`${styles.inputArea} ${styles.inputAreaCEP}`}>
                         <label>Sub. Total</label>
@@ -339,6 +365,7 @@ const SalesForm = () => {
                             name="vr_item"
                             value={'R$ ' + formData.vr_item || ""}
                             readOnly
+                            keyfilter="money"
                         />
                     </div>
                     <div className={` ${styles.buttonShop}`}>
@@ -387,6 +414,7 @@ const SalesForm = () => {
                             name="total_venda"
                             value={'R$ ' + formData.total_venda}
                             readOnly
+
                         />
                     </div>
                     <div className={styles.buttonGroup}>

@@ -36,14 +36,16 @@ export const addSaleItem = (req, res) => {
 
 export const updateSaleItem = (req, res) => {
     const q = `UPDATE venda_itens 
-               SET id_venda = ?, id_produto = ?, qtde = ?, vr_item = ?, 
-               WHERE id_venda = ? AND id_produto = ?`;
+               SET id_venda = ?, id_produto = ?, qtde = ?, vr_item = ? 
+               WHERE id_venda = ? AND id_produto = ?`; 
 
     const values = [
         req.body.id_venda,
         req.body.id_produto,
         req.body.qtde,
         req.body.vr_item,
+        req.params.id_venda, 
+        req.params.id_produto,
     ];
 
     db.query(q, values, (err) => {
@@ -52,6 +54,7 @@ export const updateSaleItem = (req, res) => {
         return res.status(200).json("Item da venda atualizado com sucesso.");
     });
 };
+
 
 export const deleteSaleItem = (req, res) => {
     const q = "DELETE FROM venda_itens WHERE id_venda = ? AND id_produto = ?";
