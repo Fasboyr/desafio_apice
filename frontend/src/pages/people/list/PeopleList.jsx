@@ -4,9 +4,11 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Card } from 'primereact/card';
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
+import { Dialog } from "primereact/dialog";
+import PeopleForm from "../form/PeopleForm";
 
 const PeopleList = () => {
     const [people, setPeople] = useState([]);
@@ -16,13 +18,26 @@ const PeopleList = () => {
     const [selectedName, setSelectedName] = useState("");
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedHood, setSelectedHood] = useState(null);
-    const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [selectedPerson, setSelectedPerson] = useState(null);
+    const location = useLocation();
 
     const filterOptions = [
         { label: 'Parte do nome', value: 'name' },
         { label: 'Cidade', value: 'city' },
         { label: 'Bairro', value: 'neighborhood' }
     ];
+
+    const handleAddClick = () => {
+        setSelectedPerson(null);
+        setShowModal(true); 
+    };
+
+    const handleCloseModal = async () => {
+        setShowModal(false); 
+        setSelectedPerson(null);
+        await getPeople();
+    };
 
     const getPeople = async () => {
         try {
@@ -52,13 +67,20 @@ const PeopleList = () => {
     };
 
     useEffect(() => {
+
+        const queryParams = new URLSearchParams(location.search);
+        if (queryParams.get("modal") === "true") {
+            handleAddClick(); 
+        }
         getPeople();
         getHoods();
         getCities();
-    }, []);
+    }, [location.search]);
 
     const handleEdit = (item) => {
-        navigate('/pform', { state: { item } });
+        setSelectedPerson(item); 
+        console.log(selectedPerson);
+        setShowModal(true); 
     };
 
     const handleDelete = async (id) => {
@@ -155,9 +177,7 @@ const PeopleList = () => {
                     )}
                 </div>
 
-                <Link to="/pform" className={style.addButtonLink}>
-                    <button className={style.addButton}>Adicionar</button>
-                </Link>
+                <button className={style.addButton} onClick={handleAddClick}>Adicionar</button>
             </div>
             <div className={style.outerContainer}>
                 <div className={style.innerContainer}>
@@ -193,6 +213,9 @@ const PeopleList = () => {
                     </div>
                 </div>
             </div>
+            <Dialog header="Adicionar Pessoa" visible={showModal} onHide={handleCloseModal}>
+             <PeopleForm onClose={handleCloseModal} person={selectedPerson} />
+            </Dialog>
         </Card>
     );
 };

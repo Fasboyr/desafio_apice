@@ -6,23 +6,20 @@ import { Dropdown } from 'primereact/dropdown';
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Card } from "primereact/card";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { FaEdit, FaShoppingCart, FaTrash } from "react-icons/fa";
 
-const SalesForm = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
+const SalesForm = ({ onClose, sale }) => {
     const [people, setPeople] = useState([]);
     const [product, setProduct] = useState([]);
     const [item, setItem] = useState([]);
     const [selectedPerson, setSelectedPerson] = useState(null);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [formData, setFormData] = useState({
-        id: '',
-        total_venda: '',
-        id_pessoa: '',
-        data_venda: '',
-        nome: '',
+        id: sale ? sale.id : '',
+        total_venda: sale ? sale.total_venda : '',
+        id_pessoa: sale ? sale.id_pessoa : '',
+        data_venda: sale ? sale.data_venda : '',
+        nome: sale ? sale.pessoa : '',
         qtde: '',
         vr_item: '',
         vr_venda: ''
@@ -37,27 +34,34 @@ const SalesForm = () => {
     }, []);
 
     useEffect(() => {
-        if (location.state && location.state.item) {
-            const item = location.state.item;
+        if (sale) { 
             setFormData({
-                id: item.id,
-                total_venda: item.total_venda,
-                id_pessoa: item.id_pessoa,
-                data_venda: item.data_venda,
-                nome: item.nome,
+                id: sale.id,
+                total_venda: sale.total_venda,
+                id_pessoa: sale.id_pessoa,
+                data_venda: sale.data_venda,
+                nome: sale.nome,
                 qtde: '',
                 vr_item: ''
             });
-
-            setIsEdit(true);
-
-            const selectedPerson = people.find(person => person.id === item.id_pessoa) || null;
+    
+            const selectedPerson = people.find(person => person.id === sale.id_pessoa) || null;
             setSelectedPerson(selectedPerson);
-
+            setIsEdit(true);
         } else {
             setIsEdit(false);
+            setFormData({ 
+                id: '',
+                total_venda: '',
+                id_pessoa: '',
+                data_venda: '',
+                nome: '',
+                qtde: '',
+                vr_item: ''
+            });
+            setSelectedPerson(null);
         }
-    }, [location.state, people]);
+    }, [sale, people]);
 
     useEffect(() => {
         const quantity = parseFloat(formData.qtde) || 0;
@@ -277,8 +281,7 @@ const SalesForm = () => {
                 vr_item: ''
             });
             setSelectedPerson(null);
-            setIsEdit(false);
-            navigate('/sales');
+            onClose();
         } catch (error) {
             toast.error("Ocorreu um erro ao salvar os dados.");
             console.log(error);
@@ -412,9 +415,7 @@ const SalesForm = () => {
                         />
                     </div>
                     <div className={styles.buttonGroup}>
-                        <Link to="/sales" className={styles.buttonContainer}>
-                            <Button className={`${styles.button} ${styles.cancelButton}`} label="CANCELAR" type="button" />
-                        </Link>
+                        <Button  onClick={onClose} className={`${styles.button} ${styles.cancelButton}` } label="CANCELAR" type="button" />
                         <Button className={`${styles.button} ${styles.saveButton}`} label="SALVAR" type="submit" />
                     </div>
                 </div>

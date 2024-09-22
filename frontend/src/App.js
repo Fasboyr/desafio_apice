@@ -1,7 +1,7 @@
 import styles from './App.module.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import "react-toastify/dist/ReactToastify.css";
-import DefaultLayout from './components/DefaultLayout.jsx';
+import DefaultLayout from './components/layout/DefaultLayout.jsx';
 import Neighborhood from './pages/neighbordhood/Neighborhood.jsx';
 import City from './pages/city/City.jsx';
 import PeopleList from './pages/people/list/PeopleList.jsx';
@@ -10,15 +10,12 @@ import Product from './pages/product/Product.jsx';
 import SalesList from './pages/sale/list/SaleList.jsx';
 import SalesForm from './pages/sale/form/SaleForm.jsx';
 
-
-
 function App() {
-
   return (
-    <div>
+    <div className={styles.appContainer}>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<DefaultLayout><Neighborhood /></DefaultLayout>} />
+          <Route path='/hood' element={<DefaultLayout><Neighborhood /></DefaultLayout>} />
           <Route path='/cities' element={<DefaultLayout><City /></DefaultLayout>} />
           <Route path='/people' element={<DefaultLayout><PeopleList /></DefaultLayout>} />
           <Route path='/pform' element={<DefaultLayout><PeopleForm /></DefaultLayout>} />
@@ -28,7 +25,6 @@ function App() {
         </Routes>
       </BrowserRouter>
     </div>
-
   );
 }
 

@@ -4,12 +4,14 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Card } from 'primereact/card';
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from 'primereact/calendar';
 import { InputText } from "primereact/inputtext";
 
 import { addLocale } from 'primereact/api';
+import SalesForm from "../form/SaleForm";
+import { Dialog } from "primereact/dialog";
 
 addLocale('pt-BR', {
     firstDayOfWeek: 0,
@@ -35,13 +37,28 @@ const SalesList = () => {
     const [endDate, setEndDate] = useState(null);
     const [selectedPerson, setSelectedPerson] = useState(null);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [selectedSale, setSelectedSale] = useState(null);
+    const location = useLocation();
 
     const filterOptions = [
         { label: 'Período de Venda', value: 'date' },
         { label: 'Pessoa', value: 'person' },
         { label: 'Produto', value: 'product' }
     ];
+
+
+    const handleAddClick = () => {
+        setSelectedSale(null);
+        setShowModal(true); 
+    };
+
+    const handleCloseModal = async () => {
+        setShowModal(false); 
+        setSelectedSale(null);
+        await getSales();
+    };
+
 
     const getSales = async () => {
         try {
@@ -71,10 +88,16 @@ const SalesList = () => {
     };
 
     useEffect(() => {
+
+        const queryParams = new URLSearchParams(location.search);
+        if (queryParams.get("modal") === "true") {
+            handleAddClick(); 
+        }
+
         getSales();
         getProducts();
         getItems();
-    }, []);
+    }, [location.search]);
 
     const filterAndSortSales = () => {
         let filteredSales = [...sales];
@@ -106,7 +129,8 @@ const SalesList = () => {
     };
 
     const handleEdit = (item) => {
-        navigate('/sform', { state: { item } });
+        setSelectedSale(item); 
+        setShowModal(true); 
     };
 
     const handleDelete = async (id) => {
@@ -190,9 +214,7 @@ const SalesList = () => {
                     </div>
                 )}
 
-                <Link to="/sform" className={style.addButtonLink}>
-                    <button className={style.addButton}>Adicionar</button>
-                </Link>
+                <button className={style.addButton} onClick={handleAddClick}>Adicionar</button>
             </div>
             <div className={style.outerContainer}>
                 <div className={style.innerContainer}>
@@ -239,6 +261,9 @@ const SalesList = () => {
                     </div>
                 </div>
             </div>
+             <Dialog header="Adicionar Venda" visible={showModal} onHide={handleCloseModal}>
+             <SalesForm onClose={handleCloseModal} sale={selectedSale} />
+            </Dialog>
         </Card>
     );
 };

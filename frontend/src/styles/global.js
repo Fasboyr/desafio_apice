@@ -10,9 +10,8 @@ const Global = createGlobalStyle`
   
   body {
 
-  
+    background-color: rgb(228, 223, 223);
     justify-content: center;
-    background-color: #f2f2f2;
   }
 `;
 

@@ -6,9 +6,9 @@ import { Dropdown } from 'primereact/dropdown';
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Card } from "primereact/card";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const PeopleForm = () => {
+const PeopleForm = ({ onClose, person }) => {
 
     const location = useLocation();
     const [hoods, setHoods] = useState([]);
@@ -16,18 +16,18 @@ const PeopleForm = () => {
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedHood, setSelectedHood] = useState(null);
     const [formData, setFormData] = useState({
-        id: '',
-        nome: '',
-        id_cidade: '',
-        id_bairro: '',
-        cidade: '',
-        bairro: '',
-        cep: '',
-        endereco: '',
-        numero: '',
-        complemento: '',
-        telefone: '',
-        email: ''
+        id: person ? person.id : '',
+        nome: person ? person.nome : '',
+        id_cidade: person ? person.id_cidade : '',
+        id_bairro: person ? person.id_bairro : '',
+        cidade: person ? person.cidade : '',
+        bairro: person ? person.bairro : '',
+        cep: person ? person.cep : '',
+        endereco: person ? person.endereco : '',
+        numero: person ? person.numero : '',
+        complemento: person ? person.complemento : '',
+        telefone: person ? person.telefone : '',
+        email: person ? person.email : ''
     });
 
     const [isEdit, setIsEdit] = useState(false);
@@ -35,36 +35,55 @@ const PeopleForm = () => {
     useEffect(() => {
         getHoods();
         getCities();
+        console.log("Itens salvos no formData")
+        console.log(formData)
     }, []);
 
     useEffect(() => {
-        if (location.state && location.state.item) {
-            const item = location.state.item;
+        if (person) { 
             setFormData({
-                id: item.id,
-                nome: item.nome,
-                cidade: item.cidade,
-                bairro: item.bairro,
-                cep: item.cep,
-                endereco: item.endereco,
-                numero: item.numero,
-                complemento: item.complemento,
-                telefone: item.telefone,
-                email: item.email
+                id: person.id,
+                nome: person.nome,
+                id_cidade: person.id_cidade,
+                id_bairro: person.id_bairro,
+                cidade: person.cidade,
+                bairro: person.bairro,
+                cep: person.cep,
+                endereco: person.endereco,
+                numero: person.numero,
+                complemento: person.complemento,
+                telefone: person.telefone,
+                email: person.email
             });
 
+            console.log("Itens salvos no formData")
+            console.log(formData)
+
+            const selectedCity = cities.find(city => city.id === person.id_cidade) || null;
+            const selectedHood = hoods.find(hood => hood.id === person.id_bairro) || null;
+            setSelectedCity(selectedCity);
+            setSelectedHood(selectedHood);
             setIsEdit(true);
-
-            const updateSelectedValues = () => {
-                setSelectedCity(cities.find(city => city.id === item.id_cidade) || null);
-                setSelectedHood(hoods.find(hood => hood.id === item.id_bairro) || null);
-
-            };
-            updateSelectedValues();
         } else {
             setIsEdit(false);
+            setFormData({ 
+                id: '',
+                nome: '',
+                id_cidade: '',
+                id_bairro: '',
+                cidade: '',
+                bairro: '',
+                cep: '',
+                endereco: '',
+                numero: '',
+                complemento: '',
+                telefone: '',
+                email: ''
+            });
+            setSelectedCity(null);
+            setSelectedHood(null);
         }
-    }, [location.state, cities, hoods]);
+    }, [person, cities, hoods]);
 
     const getHoods = async () => {
         try {
@@ -157,7 +176,7 @@ const PeopleForm = () => {
             setSelectedCity(null);
             setSelectedHood(null);
             setIsEdit(false);
-
+            onClose();
         } catch (error) {
             toast.error("Ocorreu um erro ao salvar os dados.");
         }
@@ -267,10 +286,8 @@ const PeopleForm = () => {
                 </div>
 
                 <div className={styles.buttonContainer}>
-                    <Link to="/people" className={styles.buttonContainer}>
-                        <Button className={`${styles.button} ${styles.cancelButton}`} label="CANCELAR" type="button" />
-                    </Link>
-                    <Button className={`${styles.button} ${styles.saveButton}`} label="SALVAR" type="submit" />
+                    <Button  onClick={onClose} className={`${styles.button} ${styles.cancelButton}` } label="CANCELAR" type="button" />
+                        <Button className={`${styles.button} ${styles.saveButton}`} label="SALVAR" type="submit" />
                 </div>
             </form>
             <ToastContainer autoClose={3000} position="bottom-left" />
