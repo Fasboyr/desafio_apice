@@ -50,11 +50,11 @@ const SalesList = () => {
 
     const handleAddClick = () => {
         setSelectedSale(null);
-        setShowModal(true); 
+        setShowModal(true);
     };
 
     const handleCloseModal = async () => {
-        setShowModal(false); 
+        setShowModal(false);
         setSelectedSale(null);
         await getSales();
     };
@@ -91,7 +91,7 @@ const SalesList = () => {
 
         const queryParams = new URLSearchParams(location.search);
         if (queryParams.get("modal") === "true") {
-            handleAddClick(); 
+            handleAddClick();
         }
 
         getSales();
@@ -129,8 +129,9 @@ const SalesList = () => {
     };
 
     const handleEdit = (item) => {
-        setSelectedSale(item); 
-        setShowModal(true); 
+        setSelectedSale(item);
+        console.log(item);
+        setShowModal(true);
     };
 
     const handleDelete = async (id) => {
@@ -225,22 +226,22 @@ const SalesList = () => {
                                     <th className={style.th}>Código</th>
                                     <th className={style.th}>Cliente</th>
                                     <th className={style.th}>Total de Venda</th>
-                                    <th className={style.th}></th>
-                                    <th className={style.th}></th>
+                                 
                                 </tr>
                             </thead>
                             <tbody className={style.tbody}>
                                 {filterAndSortSales().map((item, i) => (
                                     <tr key={i} className={style.tr}>
-                                        <td className={`${style.td} ${style.widthId}`}>{item.id}</td>
-                                        <td className={`${style.td} ${style.widthNome}`}>{item.pessoa}</td>
-                                        <td className={`${style.td} ${style.widthCidade}`}>{formatToCurrency(item.total_venda)}</td>
-                                        <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
-                                            <FaEdit onClick={() => handleEdit(item)} />
+                                        <td className={`${style.td} ${style.tdId}`}>{item.id}</td>
+                                        <td className={`${style.td} ${style.tdNome}`}>{item.pessoa}</td>
+                                        <td className={`${style.td} ${style.tdTotal}`}>{formatToCurrency(item.total_venda)}</td>
+                                        <td className={`${style.td} ${style.tdIcon}`}>
+                                            <FaEdit className={style.icon} onClick={() => handleEdit(item)} />
+                                            <FaTrash className={style.icon} onClick={() => handleDelete(item.id)} />
                                         </td>
-                                        <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
-                                            <FaTrash onClick={() => handleDelete(item.id)} />
-                                        </td>
+
+
+
                                     </tr>
                                 ))}
                             </tbody>
@@ -261,8 +262,8 @@ const SalesList = () => {
                     </div>
                 </div>
             </div>
-             <Dialog header="Adicionar Venda" visible={showModal} onHide={handleCloseModal}>
-             <SalesForm onClose={handleCloseModal} sale={selectedSale} />
+            <Dialog header="Adicionar Venda" visible={showModal} onHide={handleCloseModal}>
+                <SalesForm onClose={handleCloseModal} sale={selectedSale} />
             </Dialog>
         </Card>
     );

@@ -14,16 +14,18 @@
 }
 
 .cardTitle {
-    font-size: 24px;
+    font-size: xx-large;
     font-weight: bold;
     flex: 1;
     text-align: center; 
+    color: rgb(14, 14, 14);
 }
+
 
 .buttonContainer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: center; /* Alinha verticalmente os itens */
+    gap: 10px; /* Espaçamento entre os itens */
     margin-bottom: 1rem;
 }
 
@@ -61,11 +63,16 @@
    
 }
 
+.productDropdown {
+    flex: 1; 
+}
+
 .addButtonLink {
     margin-left: auto;
 }
 
 .addButton {
+    margin-left: auto; 
     padding: 10px 20px;
     font-size: 16px;
     background-color: #007bff;
@@ -74,6 +81,7 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
 
 .addButton:hover {
     background-color: #0056b3;
@@ -99,39 +107,42 @@
     border-collapse: collapse;
 }
 
-.th, .td {
+.td {
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
 }
 
 .th {
     text-align: center;
     font-weight: bold;
+    color: rgb(14, 14, 14);
 }
 
-.td {
+.tdId , .tdNome, .tdTotal {
     text-align: center;
 }
 
-.alignCenter {
-    text-align: center;
+.tdIcon {
+    display: flex;               
+    justify-content: flex-end;   
+    padding-top: 13px;
 }
 
-.widthId {
+.icon {
+    color: #000; 
+    cursor: pointer; 
+    margin-left: 5px;         
+}
+.tdId {
     width: 5%;
 }
 
-.widthNome {
+.tdNome {
     width: 30%;
 }
 
-.widthCidade {
-    width: 40%;
-}
 
-.widthTelefone {
-    width: 15%;
-}
+
 
 .totalContainer {
     display: flex;
@@ -157,4 +168,42 @@
 .inputTotal {
     width: 100%; 
     max-width: 150px; 
+}
+
+
+@media (max-width: 600px) {
+
+    .dateContainer{
+        margin-left: 0;
+    }
+
+    .buttonContainer {
+        flex-direction: column; /* Muda para coluna em telas menores */
+        align-items: center; /* Alinha os itens à esquerda */
+    }
+
+    .addButton {
+        
+        margin-left: 0; /* Remove a margem à esquerda */
+        align-self: center; /* Alinha o botão à direita */
+        width: 50%; /* Opicional: faça o botão ocupar toda a largura */
+    }
+
+    .filterDropdown,
+    .personDropdown,
+    .productDropdown,
+    .dateContainer {
+        width: 100%; /* Faz os campos ocuparem toda a largura disponível */
+        max-width: 300px; /* Define uma largura máxima para os dropdowns */
+        margin-bottom: 10px; /* Espaçamento entre os campos */
+        display: flex; /* Garante que os itens dentro sejam flexíveis */
+        justify-content: center; /* Centraliza os itens dentro do contêiner */
+    }
+}
+
+
+.dateContainer{
+    margin-left: 0;
+    width: 100%;
+    margin-bottom: 10px; 
 }

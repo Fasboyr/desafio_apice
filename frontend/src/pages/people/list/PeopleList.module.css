@@ -17,65 +17,72 @@
     font-size: 24px;
     font-weight: bold;
     flex: 1;
-    text-align: center; 
+    text-align: center;
+    color: rgb(14, 14, 14);
 }
 
 .buttonContainer {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 10px;
     margin-bottom: 1rem;
 }
+
 .filterContainer {
     display: flex;
-    flex-direction: row; 
-    gap: 10px; 
-    align-items: center; 
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
 }
 
 .filterDropdown {
-    flex: 1; 
-    min-width: 150px; 
+    flex: 1;
+    min-width: 150px;
 }
 
 
 .cityOrHoodFilter {
-    max-width: 140px; 
+    max-width: 140px;
 }
 
 .noFilterOrNameActive {
-    max-width: 190px; 
+    max-width: 190px;
 }
+
 .nameInputContainer {
-    flex: 1; 
+    flex: 1;
     max-width: 250px;
-    margin-left: 30px; 
+    margin-left: 30px;
 }
 
 
 .cityDropdown,
 .neighborhoodDropdown {
-    flex: 1; 
-    min-width: 150px; 
+    flex: 1;
+    min-width: 150px;
 }
 
 .p-dropdown {
-    width: 100%; 
+    width: 100%;
 }
 
 
 .cityOrHoodFilter {
     max-width: 50px;
-   
+
 }
+
 .noFilterOrNameActive {
     max-width: 40px;
-   
+
 }
 
-
+.addButtonLink {
+    margin-left: auto;
+}
 
 .addButton {
+    margin-left: auto;
     padding: 10px 20px;
     font-size: 16px;
     background-color: #007bff;
@@ -109,36 +116,96 @@
     border-collapse: collapse;
 }
 
-.th, .td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
 
 .th {
     text-align: center;
     font-weight: bold;
+    color: rgb(14, 14, 14);
+    padding: 10px;
 }
 
 .td {
+    border-top: 1px solid #ddd;
+    padding: 10px;
+}
+
+
+.tdId,
+.tdNome,
+.tdCidade,
+.tdTelefone {
     text-align: center;
 }
 
-.alignCenter {
-    text-align: center;
+.tdIcon {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 13px;
 }
 
-.widthId {
+.icon {
+    color: #000;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.tdId {
     width: 5%;
 }
 
-.widthNome {
+.tdNome {
     width: 30%;
 }
 
-.widthCidade {
+.tdCidade {
     width: 40%;
 }
 
-.widthTelefone {
+.tdTelefone {
     width: 15%;
+}
+
+
+@media (max-width: 768px) {
+    .buttonContainer {
+        flex-direction: column;
+    }
+
+    .filterContainer {
+        flex-direction: column;
+        align-items: center;
+
+    }
+
+
+    .filterDropdown,
+    .cityDropdown,
+    .neighborhoodDropdown,
+    .nameInputContainer {
+        margin-left: 0;
+        margin-bottom: 10px;
+   
+    }
+
+    .addButton {
+        
+        margin-left: 0; 
+        align-self: center; 
+        width: 50%; 
+    }
+
+    .thId,
+    .tdId,
+    .thCidade,
+    .tdCidade {
+        display: none;
+    }
+
+    .tdNome {
+        width: 40%;
+    }
+
+    .tdTelefone {
+        align-items: center;
+    }
 }

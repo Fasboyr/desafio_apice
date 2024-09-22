@@ -284,15 +284,16 @@ const PeopleForm = ({ onClose, person }) => {
                         />
                     </div>
                 </div>
-
+    
                 <div className={styles.buttonContainer}>
-                    <Button  onClick={onClose} className={`${styles.button} ${styles.cancelButton}` } label="CANCELAR" type="button" />
-                        <Button className={`${styles.button} ${styles.saveButton}`} label="SALVAR" type="submit" />
+                    <Button onClick={onClose} className={`${styles.button} ${styles.cancelButton}`} label="CANCELAR" type="button" />
+                    <Button className={`${styles.button} ${styles.saveButton}`} label="SALVAR" type="submit" />
                 </div>
             </form>
             <ToastContainer autoClose={3000} position="bottom-left" />
         </Card>
     );
+    
 };
 
 export default PeopleForm;

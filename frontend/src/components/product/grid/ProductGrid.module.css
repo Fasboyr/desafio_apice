@@ -13,7 +13,6 @@
 
 .th{
     text-align: center;
-    border-bottom: inset;
     padding-bottom: 5px;
 }
 
@@ -21,6 +20,7 @@
     padding-top: 15px;
     text-align: center;
     width: auto;
+    border-top: 1px solid #cec9c9;
 }
 
 
@@ -28,16 +28,31 @@
     text-align: center;
 }
 
-.width30 {
+.tdId {
+    width: 15%;
+}
+.tdNome {
     width: 60%;
 }
 
-.width15 {
+.tdValor {
     width: 25%;
 }
 
-.width5 {
-    width: 5%;
+  
+@media (max-width: 768px) {
+
+    .thId, .tdId{
+        display: none;  
+    }
+
+    .tdNome {
+        width: 55%;
+        margin-bottom: 20px; 
+    }
+
+    .tdValor {
+        width: 40%; 
+    }
+
 }
-  
-  

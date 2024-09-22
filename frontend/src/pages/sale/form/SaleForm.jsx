@@ -34,7 +34,7 @@ const SalesForm = ({ onClose, sale }) => {
     }, []);
 
     useEffect(() => {
-        if (sale) { 
+        if (sale) {
             setFormData({
                 id: sale.id,
                 total_venda: sale.total_venda,
@@ -44,13 +44,13 @@ const SalesForm = ({ onClose, sale }) => {
                 qtde: '',
                 vr_item: ''
             });
-    
+
             const selectedPerson = people.find(person => person.id === sale.id_pessoa) || null;
             setSelectedPerson(selectedPerson);
             setIsEdit(true);
         } else {
             setIsEdit(false);
-            setFormData({ 
+            setFormData({
                 id: '',
                 total_venda: '',
                 id_pessoa: '',
@@ -201,13 +201,13 @@ const SalesForm = ({ onClose, sale }) => {
                     ...items,
                 });
             }
-            
+
             await axios.put(`http://localhost:8800/products/${items.id_produto}`, {
                 id: items.id_produto,
                 nome: items.produto,
-                vr_venda: items.preco_unitario 
+                vr_venda: items.preco_unitario
             });
-            
+
         }
         toast.success("Itens salvos com sucesso.");
     };
@@ -288,7 +288,12 @@ const SalesForm = ({ onClose, sale }) => {
         }
     };
 
-
+    const formatToCurrency = (value) => {
+        if (isNaN(value)) {
+            return ""; 
+        }
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+    };
     return (
         <Card className={styles.card} title={<div className={styles.cardTitle}>Cadastro de Vendas</div>}>
             <form className={styles.formContainer} onSubmit={handleSubmit}>
@@ -349,7 +354,7 @@ const SalesForm = ({ onClose, sale }) => {
                         <InputText
                             className={styles.input}
                             name="vr_venda"
-                            value={formData.vr_venda || ""}
+                            value={(formatToCurrency(formData.vr_venda)) || ("")}
                             onChange={handleChange}
                             keyfilter="money"
                         />
@@ -360,7 +365,7 @@ const SalesForm = ({ onClose, sale }) => {
                         <InputText
                             className={styles.input}
                             name="vr_item"
-                            value={'R$ ' + formData.vr_item || ""}
+                            value={formatToCurrency(formData.vr_item) || ""}
                             readOnly
                             keyfilter="money"
                         />
@@ -373,10 +378,10 @@ const SalesForm = ({ onClose, sale }) => {
                 <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th className={styles.th}>Código</th>
+                            <th className={`${styles.th} ${styles.thCodigo}`}>Código</th>
                             <th className={styles.th}>Produto</th>
-                            <th className={styles.th}>Nº de Itens</th>
-                            <th className={styles.th}>Valor Unitário</th>
+                            <th className={`${styles.th} ${styles.thQuantidade}`}>Nº de Itens</th>
+                            <th className={`${styles.th} ${styles.thValorUnitario}`}>Valor Unitário</th>
                             <th className={styles.th}>Sub. Total</th>
                             <th className={styles.th}></th>
                             <th className={styles.th}></th>
@@ -387,16 +392,14 @@ const SalesForm = ({ onClose, sale }) => {
                             .filter(i => i.id_venda === formData.id)
                             .map((item, i) => (
                                 <tr key={i} className={styles.tr}>
-                                    <td className={`${styles.td} ${styles.width15}`}>{item.id_produto}</td>
-                                    <td className={`${styles.td} ${styles.width30}`}>{item.produto}</td>
-                                    <td className={`${styles.td} ${styles.width30}`}>{item.qtde}</td>
-                                    <td className={`${styles.td} ${styles.width30}`}>R$ {item.preco_unitario}</td>
-                                    <td className={`${styles.td} ${styles.width30}`}>R$ {item.vr_item}</td>
-                                    <td className={`${styles.td} ${styles.width5} ${styles.alignCenter}`}>
-                                        <FaEdit onClick={() => handleEditItem(item)} />
-                                    </td>
-                                    <td className={`${styles.td} ${styles.width5} ${styles.alignCenter}`}>
-                                        <FaTrash onClick={() => handleDelete(item)} />
+                                    <td className={`${styles.td} ${styles.tdCodigo}`}>{item.id_produto}</td>
+                                    <td className={`${styles.td} ${styles.tdProduto}`}>{item.produto}</td>
+                                    <td className={`${styles.td} ${styles.tdQuantidade}`}>{item.qtde}</td>
+                                    <td className={`${styles.td} ${styles.tdValorUnitario}`}>{formatToCurrency(item.preco_unitario)}</td>
+                                    <td className={`${styles.td} ${styles.tdValorTotal}`}>{formatToCurrency(item.vr_item)}</td>
+                                    <td className={`${styles.td} ${styles.tdIcon}`}>
+                                        <FaEdit className={styles.icon} onClick={() => handleEditItem(item)} />
+                                        <FaTrash className={styles.icon} onClick={() => handleDelete(item.id)} />
                                     </td>
                                 </tr>
                             ))}
@@ -415,9 +418,12 @@ const SalesForm = ({ onClose, sale }) => {
                         />
                     </div>
                     <div className={styles.buttonGroup}>
-                        <Button  onClick={onClose} className={`${styles.button} ${styles.cancelButton}` } label="CANCELAR" type="button" />
-                        <Button className={`${styles.button} ${styles.saveButton}`} label="SALVAR" type="submit" />
+                        <Button onClick={onClose} className={`${styles.button} ${styles.cancelButton} ${styles.fullWidth}`} label="CANCELAR" type="button" />
+                        <Button className={`${styles.button} ${styles.saveButton} ${styles.fullWidth}`} label="SALVAR" type="submit" />
+
                     </div>
+
+                    
                 </div>
 
 

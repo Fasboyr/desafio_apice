@@ -25,22 +25,24 @@ const ProductGrid = ({ products, setProducts, setOnEdit }) => {
         setOnEdit(null);
     };
 
-
+    const formatToCurrency = (value) => {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+    };
     return (
         <table className={style.table}>
             <thead>
                 <tr>
-                    <th className={style.th}>Código</th>
-                    <th className={style.th}>Nome</th>
-                    <th className={style.th}>Valor</th>
+                    <th className={`${style.th} ${style.thId}`}>Código</th>
+                    <th className={`${style.th} ${style.thNome}`}>Nome</th>
+                    <th className={`${style.th} ${style.thValor}`}>Valor</th>
                 </tr>
             </thead>
             <tbody className={style.tbody}>
                 {products.map((item, i) => (
                     <tr key={i} className={style.tr}>
-                        <td className={`${style.td} ${style.width15}`}>{item.id}</td>
-                        <td className={`${style.td} ${style.width30}`}>{item.nome}</td>
-                        <td className={`${style.td} ${style.width30}`}>R$ {item.vr_venda}</td>
+                        <td className={`${style.td} ${style.tdId}`}>{item.id}</td>
+                        <td className={`${style.td} ${style.tdNome}`}>{item.nome}</td>
+                        <td className={`${style.td} ${style.tdValor}`}>{formatToCurrency(item.vr_venda)}</td>
                         <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
                             <FaEdit onClick={() => handleEdit(item)} />
                         </td>

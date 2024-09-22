@@ -185,26 +185,23 @@ const PeopleList = () => {
                         <table className={style.table}>
                             <thead>
                                 <tr>
-                                    <th className={style.th}>Código</th>
-                                    <th className={style.th}>Nome</th>
-                                    <th className={style.th}>Cidade</th>
-                                    <th className={style.th}>Telefone</th>
-                                    <th className={style.th}></th>
-                                    <th className={style.th}></th>
+                                    <th className={`${style.th} ${style.tdId}`}>Código</th>
+                                    <th className={`${style.th} ${style.tdNome}`}>Nome</th>
+                                    <th className={`${style.th} ${style.tdCidade}`}>Cidade</th>
+                                    <th className={`${style.th} ${style.tdTelefone}`}>Telefone</th>
+                                 
                                 </tr>
                             </thead>
                             <tbody className={style.tbody}>
                                 {filterAndSortPeople().map((item, i) => (
                                     <tr key={i} className={style.tr}>
-                                        <td className={`${style.td} ${style.widthId}`}>{item.id}</td>
-                                        <td className={`${style.td} ${style.widthNome}`}>{item.nome}</td>
-                                        <td className={`${style.td} ${style.widthCidade}`}>{item.cidade}</td>
-                                        <td className={`${style.td} ${style.widthTelefone}`}>{item.telefone}</td>
-                                        <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
-                                            <FaEdit onClick={() => handleEdit(item)} />
-                                        </td>
-                                        <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
-                                            <FaTrash onClick={() => handleDelete(item.id)} />
+                                        <td className={`${style.td} ${style.tdId}`}>{item.id}</td>
+                                        <td className={`${style.td} ${style.tdNome}`}>{item.nome}</td>
+                                        <td className={`${style.td} ${style.tdCidade}`}>{item.cidade}</td>
+                                        <td className={`${style.td} ${style.tdTelefone}`}>{item.telefone}</td>
+                                        <td className={`${style.td} ${style.tdIcon}`}>
+                                            <FaEdit className={style.icon} onClick={() => handleEdit(item)} />
+                                            <FaTrash className={style.icon} onClick={() => handleDelete(item.id)} />
                                         </td>
                                     </tr>
                                 ))}
