@@ -6,11 +6,9 @@ import { Dropdown } from 'primereact/dropdown';
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Card } from "primereact/card";
-import { useLocation } from "react-router-dom";
 
 const PeopleForm = ({ onClose, person }) => {
 
-    const location = useLocation();
     const [hoods, setHoods] = useState([]);
     const [cities, setCities] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
@@ -35,8 +33,6 @@ const PeopleForm = ({ onClose, person }) => {
     useEffect(() => {
         getHoods();
         getCities();
-        console.log("Itens salvos no formData")
-        console.log(formData)
     }, []);
 
     useEffect(() => {
@@ -56,8 +52,6 @@ const PeopleForm = ({ onClose, person }) => {
                 email: person.email
             });
 
-            console.log("Itens salvos no formData")
-            console.log(formData)
 
             const selectedCity = cities.find(city => city.id === person.id_cidade) || null;
             const selectedHood = hoods.find(hood => hood.id === person.id_bairro) || null;

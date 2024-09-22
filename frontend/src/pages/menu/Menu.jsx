@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'primereact/button';
-import { FaCity, FaBuilding, FaProductHunt, FaList, FaPlus, FaBox, FaMapMarkerAlt, FaClipboardList } from 'react-icons/fa';
+import { FaCity, FaBox, FaMapMarkerAlt, FaClipboardList } from 'react-icons/fa';
 import { MdAddShoppingCart } from "react-icons/md";
 import { IoMdPersonAdd } from "react-icons/io";
 import { Link } from 'react-router-dom';

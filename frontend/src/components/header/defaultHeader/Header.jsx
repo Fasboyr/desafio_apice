@@ -1,9 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
-import { FaShoppingCart, FaBox, FaUser, FaCity, FaMapMarkerAlt, FaSignInAlt } from "react-icons/fa"; 
+import { FaShoppingCart, FaBox, FaUser, FaCity, FaMapMarkerAlt} from "react-icons/fa"; 
 import logo from "../../../assets/images/logo.png";
-import GlobalStyle from "../../../styles/global";
 
 const Header = () => {
   return (

@@ -124,12 +124,10 @@
     margin-left: 20px;
 }
 
-/* Efeito hover nos links */
 .headerNavLink:hover {
     text-decoration: underline;
 }
 
-/* Responsividade para telas menores */
 @media (max-width: 768px) {
     .header {
         flex-direction: column;

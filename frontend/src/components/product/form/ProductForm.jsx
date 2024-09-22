@@ -15,7 +15,7 @@ const ProductForm = ({ getProducts, onEdit, setOnEdit }) => {
 
             product.id.value = onEdit.id;
             product.nome.value = onEdit.nome;
-            setValorVenda(formatToCurrency(onEdit.vr_venda)); // Usar a função aqui
+            setValorVenda(formatToCurrency(onEdit.vr_venda));
         }
     }, [onEdit]);
 
@@ -32,7 +32,6 @@ const ProductForm = ({ getProducts, onEdit, setOnEdit }) => {
             return toast.warn("Preencha todos os campos!");
         }
 
-        // Remover caracteres não numéricos e converter para float
         const valorNumerico = parseFloat(valorVenda.replace(/[^\d,]/g, '').replace(',', '.'));
 
         if (isNaN(valorNumerico)) {

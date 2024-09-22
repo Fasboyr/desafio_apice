@@ -24,8 +24,8 @@
 
 .buttonContainer {
     display: flex;
-    align-items: center; /* Alinha verticalmente os itens */
-    gap: 10px; /* Espaçamento entre os itens */
+    align-items: center; 
+    gap: 10px; 
     margin-bottom: 1rem;
 }
 
@@ -178,32 +178,26 @@
     }
 
     .buttonContainer {
-        flex-direction: column; /* Muda para coluna em telas menores */
-        align-items: center; /* Alinha os itens à esquerda */
+        flex-direction: column; 
+        align-items: center; 
     }
 
     .addButton {
         
-        margin-left: 0; /* Remove a margem à esquerda */
-        align-self: center; /* Alinha o botão à direita */
-        width: 50%; /* Opicional: faça o botão ocupar toda a largura */
+        margin-left: 0; 
+        align-self: center; 
+        width: 50%; 
     }
 
     .filterDropdown,
     .personDropdown,
     .productDropdown,
     .dateContainer {
-        width: 100%; /* Faz os campos ocuparem toda a largura disponível */
-        max-width: 300px; /* Define uma largura máxima para os dropdowns */
-        margin-bottom: 10px; /* Espaçamento entre os campos */
-        display: flex; /* Garante que os itens dentro sejam flexíveis */
-        justify-content: center; /* Centraliza os itens dentro do contêiner */
+        width: 100%; 
+        max-width: 300px; 
+        margin-bottom: 10px; 
+        display: flex; 
+        justify-content: center; 
     }
 }
 
-
-.dateContainer{
-    margin-left: 0;
-    width: 100%;
-    margin-bottom: 10px; 
-}

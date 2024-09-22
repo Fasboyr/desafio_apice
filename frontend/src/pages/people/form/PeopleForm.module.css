@@ -3,7 +3,7 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     max-width: 1000px;
-    width: 100%; /* Ajuste para largura máxima */
+    width: 100%;
     padding: 20px;
     box-sizing: border-box;
 }
@@ -20,7 +20,7 @@
 
 .inputRow {
     display: flex;
-    flex-wrap: wrap; /* Permite que os elementos se movam para a linha seguinte */
+    flex-wrap: wrap; 
     width: 100%;
     gap: 10px;
 }
@@ -30,7 +30,7 @@
     flex-direction: column;
     margin-right: 20px;
     flex: 1;
-    min-width: 150px; /* Define uma largura mínima para as áreas de input */
+    min-width: 150px; 
 }
 
 .input {
