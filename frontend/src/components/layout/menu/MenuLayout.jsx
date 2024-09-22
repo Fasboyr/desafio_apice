@@ -1,11 +1,12 @@
 import React from "react";
-import Header from "../header/Header";
-import Footer from "../footer/Footer";
-import styles from './DefaultLayout.module.css'; 
-const DefaultLayout = ({ children }) => {
+import Footer from "../../footer/Footer";
+import styles from './MenuLayout.module.css'; 
+import MenuHeader from "../../header/headerMenu/MenuHeader";
+
+const MenuLayout = ({ children }) => {
     return (
         <div >
-            <Header />
+            <MenuHeader />
             <div className={styles.layout}>
             <main className={styles.mainContent}>
                 {children}
@@ -17,4 +18,4 @@ const DefaultLayout = ({ children }) => {
     );
 }
 
-export default DefaultLayout;
+export default MenuLayout;

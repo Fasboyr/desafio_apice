@@ -1,0 +1,21 @@
+.header {
+    border: 1px solid #aaa9a9;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #060839;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-size: x-large;
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 100%;
+    z-index: 10;
+}
+
+.logo {
+    width: 450px;  
+    height: 135px; 
+}

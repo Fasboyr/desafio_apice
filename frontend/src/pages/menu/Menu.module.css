@@ -1,0 +1,132 @@
+.cardContent {
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 1000px;
+    margin: 130px auto;
+    padding: 20px;
+}
+.menuTitleCard {
+    text-align: center; 
+    margin-bottom: 30px; 
+    color: #333;
+}
+
+
+
+.row {
+    display: flex;
+    justify-content: space-between; 
+    margin-bottom: 20px;
+}
+
+.menuTitle {
+    font-size: xx-large;
+    font-weight: bold;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #333; 
+}
+
+.menuButtonGroup {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.iconSpacing {
+    margin-right: 8px; 
+}
+
+.customButton {
+    background-color: #060839; 
+    border: none;
+    color: #fff; 
+}
+
+
+.customButton:hover {
+    background-color: #253551; 
+}
+
+
+
+.menuSectionGroup {
+    width: 48%;
+}
+
+
+.borderedGroup {
+    border: 2px solid #ddd;  
+    border-radius: 8px;       
+}
+
+.relatedRow {
+    display: flex;
+    justify-content: space-between; 
+    margin-top: 20px; 
+}
+
+
+.relatedRow .p-button {
+    flex: 1; 
+    max-width: 200px; 
+}
+
+
+.separator {
+    border-top: 2px solid #ddd; 
+    width: 100%; 
+    margin: 10px 0; 
+}
+
+
+.peopleRow {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.spacer {
+    width: 20px; 
+}
+
+.saleRow {
+    display: flex;
+    justify-content: center; 
+    margin-top: 20px; 
+}
+
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .menuSectionGroup {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .menuButtonGroup {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .peopleRow, .saleRow {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .saleRow{
+        margin-bottom: 20px;
+    }
+
+    .spacer {
+        width: 0;
+        height: 10px;
+    }
+}
