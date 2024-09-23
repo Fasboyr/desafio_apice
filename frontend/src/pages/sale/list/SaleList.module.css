@@ -82,6 +82,10 @@
     cursor: pointer;
 }
 
+.iconSpacing {
+    padding-top: 3px;
+    margin-right: 8px; 
+}
 
 .addButton:hover {
     background-color: #0056b3;

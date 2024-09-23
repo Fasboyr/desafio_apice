@@ -9,6 +9,8 @@ import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import PeopleForm from "../form/PeopleForm";
+import { IoMdPersonAdd } from "react-icons/io";
+import { Button } from "primereact/button";
 
 const PeopleList = () => {
     const [people, setPeople] = useState([]);
@@ -177,7 +179,7 @@ const PeopleList = () => {
                     )}
                 </div>
 
-                <button className={style.addButton} onClick={handleAddClick}>Adicionar</button>
+                <Button icon={<span className={style.iconSpacing}><IoMdPersonAdd /></span>} className={style.addButton} onClick={handleAddClick}>Adicionar</Button>
             </div>
             <div className={style.outerContainer}>
                 <div className={style.innerContainer}>

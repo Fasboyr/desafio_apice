@@ -12,6 +12,8 @@ import { InputText } from "primereact/inputtext";
 import { addLocale } from 'primereact/api';
 import SalesForm from "../form/SaleForm";
 import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
+import { MdAddShoppingCart } from "react-icons/md";
 
 addLocale('pt-BR', {
     firstDayOfWeek: 0,
@@ -215,7 +217,7 @@ const SalesList = () => {
                     </div>
                 )}
 
-                <button className={style.addButton} onClick={handleAddClick}>Adicionar</button>
+                <Button  icon={<span className={style.iconSpacing}><MdAddShoppingCart /></span>} className={style.addButton} onClick={handleAddClick}>Adicionar</Button>
             </div>
             <div className={style.outerContainer}>
                 <div className={style.innerContainer}>

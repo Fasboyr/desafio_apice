@@ -90,10 +90,16 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    align-items: center;
 }
 
 .addButton:hover {
     background-color: #0056b3;
+}
+
+.iconSpacing {
+    padding-top: 3px;
+    margin-right: 8px; 
 }
 
 
