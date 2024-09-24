@@ -37,7 +37,7 @@ function  Neighborhood() {
         <NeighborhoodForm onEdit={onEdit} setOnEdit={setOnEdit} getHoods={getHoods}/>
         <NeighborhoodGrid neighborhoods={hoods} setHoods={setHoods} setOnEdit={setOnEdit}/>
       </div>
-      <ToastContainer autoClose={3000} position="bottom-left" />
+      <ToastContainer autoClose={3000} position="top-right" />
       <GlobalStyle />
     </>
   );

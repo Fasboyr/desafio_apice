@@ -37,7 +37,7 @@ function  City() {
         <CityForm onEdit={onEdit} setOnEdit={setOnEdit} getCities={getCities}/>
         <CityGrid cities={cities} setCities={setCities} setOnEdit={setOnEdit}/>
       </div>
-      <ToastContainer autoClose={3000} position="bottom-left" />
+      <ToastContainer autoClose={3000} position="top-left" />
       <GlobalStyle />
     </>
   );

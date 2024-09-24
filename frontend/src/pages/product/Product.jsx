@@ -37,7 +37,7 @@ function  Product() {
         <ProductForm onEdit={onEdit} setOnEdit={setOnEdit} getProducts={getProducts}/>
         <ProductGrid products={products} setProducts={setProducts} setOnEdit={setOnEdit}/>
       </div>
-      <ToastContainer autoClose={3000} position="bottom-left" />
+      <ToastContainer autoClose={3000} position="top-right" />
       <GlobalStyle />
     </>
   );

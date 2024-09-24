@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import style from "./PeopleList.module.css";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { Card } from 'primereact/card';
 import { useLocation } from "react-router-dom";
@@ -215,6 +215,7 @@ const PeopleList = () => {
             <Dialog header="Adicionar Pessoa" visible={showModal} onHide={handleCloseModal}>
              <PeopleForm onClose={handleCloseModal} person={selectedPerson} />
             </Dialog>
+            <ToastContainer autoClose={3000} position="top-right" />
         </Card>
     );
 };

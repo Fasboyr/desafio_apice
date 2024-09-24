@@ -284,7 +284,7 @@ const PeopleForm = ({ onClose, person }) => {
                     <Button className={`${styles.button} ${styles.saveButton}`} label="SALVAR" type="submit" />
                 </div>
             </form>
-            <ToastContainer autoClose={3000} position="bottom-left" />
+            <ToastContainer autoClose={3000} position="top-right" />
         </Card>
     );
     

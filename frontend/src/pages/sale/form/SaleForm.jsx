@@ -429,7 +429,7 @@ const SalesForm = ({ onClose, sale }) => {
 
             </form>
 
-            <ToastContainer autoClose={3000} position="bottom-left" />
+            <ToastContainer autoClose={3000} position="top-right" />
         </Card>
     );
 };

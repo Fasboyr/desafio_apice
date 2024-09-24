@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import style from "./SaleList.module.css";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { Card } from 'primereact/card';
 import { useLocation } from "react-router-dom";
@@ -267,6 +267,7 @@ const SalesList = () => {
             <Dialog header="Adicionar Venda" visible={showModal} onHide={handleCloseModal}>
                 <SalesForm onClose={handleCloseModal} sale={selectedSale} />
             </Dialog>
+            <ToastContainer autoClose={3000} position="top-right" />
         </Card>
     );
 };
