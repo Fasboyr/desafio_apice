@@ -122,6 +122,16 @@ const PeopleList = () => {
         return filteredPeople.sort((a, b) => (a.nome > b.nome ? 1 : -1));
     };
 
+    const formatPhone = (phone) => {
+        const cleaned = ('' + phone).replace(/\D/g, ''); 
+        const match = cleaned.match(/^(\d{2})(\d{1})(\d{4})(\d{4})$/); 
+        if (match) {
+            return `(${match[1]}) ${match[2]} ${match[3]}-${match[4]}`; 
+        }
+        return phone;
+    };
+    
+
     return (
         <Card className={style.card}>
             <div className={style.cardHeader}>
@@ -200,7 +210,7 @@ const PeopleList = () => {
                                         <td className={`${style.td} ${style.tdId}`}>{item.id}</td>
                                         <td className={`${style.td} ${style.tdNome}`}>{item.nome}</td>
                                         <td className={`${style.td} ${style.tdCidade}`}>{item.cidade}</td>
-                                        <td className={`${style.td} ${style.tdTelefone}`}>{item.telefone}</td>
+                                        <td className={`${style.td} ${style.tdTelefone}`}>{formatPhone(item.telefone)}</td>
                                         <td className={`${style.td} ${style.tdIcon}`}>
                                             <FaEdit className={style.icon} onClick={() => handleEdit(item)} />
                                             <FaTrash className={style.icon} onClick={() => handleDelete(item.id)} />

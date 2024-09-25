@@ -175,6 +175,16 @@ const PeopleForm = ({ onClose, person }) => {
             toast.error("Ocorreu um erro ao salvar os dados.");
         }
     };
+    const formatPhone = (phone) => {
+        const cleaned = ('' + phone).replace(/\D/g, ''); 
+        const match = cleaned.match(/^(\d{2})(\d{1})(\d{4})(\d{4})$/); 
+        if (match) {
+            return `(${match[1]}) ${match[2]} ${match[3]}-${match[4]}`; 
+        }
+        return phone;
+    };
+    
+
     return (
         <Card className={styles.card} title={<div className={styles.cardTitle}>Cadastro de Pessoas</div>}>
             <form className={styles.formContainer} onSubmit={handleSubmit}>
@@ -202,7 +212,7 @@ const PeopleForm = ({ onClose, person }) => {
                         <InputText
                             className={styles.input}
                             name="telefone"
-                            value={formData.telefone || ""}
+                            value={formatPhone(formData.telefone) || ""}
                             onChange={handleChange}
                         />
                     </div>
