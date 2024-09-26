@@ -40,10 +40,10 @@ const NeighborhoodGrid = ({ neighborhoods, setHoods, setOnEdit }) => {
                         <td className={`${style.td} ${style.width15}`}>{item.id}</td>
                         <td className={`${style.td} ${style.width30}`}>{item.nome}</td>
                         <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
-                            <FaEdit onClick={() => handleEdit(item)} />
+                            <FaEdit className={style.icon} onClick={() => handleEdit(item)} />
                         </td>
                         <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
-                            <FaTrash onClick={() => handleDelete(item.id)} />
+                            <FaTrash className={style.icon} onClick={() => handleDelete(item.id)} />
                         </td>
                     </tr>
                 ))}

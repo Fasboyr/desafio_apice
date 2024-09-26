@@ -127,7 +127,7 @@ const SalesList = () => {
             });
         }
 
-        return filteredSales.sort((a, b) => (a.pessoa > b.pessoa ? 1 : -1));
+        return filteredSales.sort((a, b) => (a.id > b.id ? 1 : -1));
     };
 
     const handleEdit = (item) => {

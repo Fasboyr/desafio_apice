@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { Card } from "primereact/card";
 
 const PeopleForm = ({ onClose, person }) => {
-
+    const [isFocused, setIsFocused] = useState(false);
     const [hoods, setHoods] = useState([]);
     const [cities, setCities] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
@@ -36,7 +36,7 @@ const PeopleForm = ({ onClose, person }) => {
     }, []);
 
     useEffect(() => {
-        if (person) { 
+        if (person) {
             setFormData({
                 id: person.id,
                 nome: person.nome,
@@ -60,7 +60,7 @@ const PeopleForm = ({ onClose, person }) => {
             setIsEdit(true);
         } else {
             setIsEdit(false);
-            setFormData({ 
+            setFormData({
                 id: '',
                 nome: '',
                 id_cidade: '',
@@ -175,15 +175,32 @@ const PeopleForm = ({ onClose, person }) => {
             toast.error("Ocorreu um erro ao salvar os dados.");
         }
     };
-    const formatPhone = (phone) => {
-        const cleaned = ('' + phone).replace(/\D/g, ''); 
-        const match = cleaned.match(/^(\d{2})(\d{1})(\d{4})(\d{4})$/); 
-        if (match) {
-            return `(${match[1]}) ${match[2]} ${match[3]}-${match[4]}`; 
+    const formatPhone = (phone, isFocused) => {
+        const cleaned = ('' + phone).replace(/\D/g, '');
+
+        let formattedPhone = phone;
+
+        if (cleaned.length <= 2) {
+            formattedPhone = isFocused || cleaned.length > 0 ? `(${cleaned}` : cleaned;
+        } else if (cleaned.length <= 6) {
+            formattedPhone = `(${cleaned.slice(0, 2)}) ${cleaned.slice(2)}`;
+        } else if (cleaned.length === 10) {
+            formattedPhone = `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6, 10)}`;
+        } else if (cleaned.length === 11) {
+            formattedPhone = `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 3)} ${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
         }
-        return phone;
+
+        return formattedPhone;
     };
-    
+
+    const handleFocus = () => setIsFocused(true);
+
+    const handleBlur = () => {
+        if ((formData.telefone).length === 0) setIsFocused(false);
+    };
+
+
+
 
     return (
         <Card className={styles.card} title={<div className={styles.cardTitle}>Cadastro de Pessoas</div>}>
@@ -212,7 +229,9 @@ const PeopleForm = ({ onClose, person }) => {
                         <InputText
                             className={styles.input}
                             name="telefone"
-                            value={formatPhone(formData.telefone) || ""}
+                            value={formatPhone(formData.telefone, isFocused) || ""}
+                            onFocus={handleFocus}
+                            onBlur={handleBlur}
                             onChange={handleChange}
                         />
                     </div>
@@ -288,7 +307,7 @@ const PeopleForm = ({ onClose, person }) => {
                         />
                     </div>
                 </div>
-    
+
                 <div className={styles.buttonContainer}>
                     <Button onClick={onClose} className={`${styles.button} ${styles.cancelButton}`} label="CANCELAR" type="button" />
                     <Button className={`${styles.button} ${styles.saveButton}`} label="SALVAR" type="submit" />
@@ -297,7 +316,7 @@ const PeopleForm = ({ onClose, person }) => {
             <ToastContainer autoClose={3000} position="top-right" />
         </Card>
     );
-    
+
 };
 
 export default PeopleForm;

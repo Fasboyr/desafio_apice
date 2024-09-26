@@ -39,6 +39,16 @@
     width: 25%;
 }
 
+.icon {
+    color: #000;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.icon:hover{
+    color: #434040;
+}
+
   
 @media (max-width: 768px) {
 

@@ -13,9 +13,9 @@ const Header = () => {
       <nav className={styles.navCenter}>
         <ul>
         <li className={`${styles.dropdown} ${styles.centerItems}`}>
-            <Link className={styles.headerNavLink} to="/people">
+            <div className={`${styles.headerNavLink} ${styles.dropdown}`} >
               <FaUser /> Pessoas 
-            </Link>
+            </div>
             <ul className={styles.dropdownContent}>
               <li><Link to="/people" >Lista</Link></li>
               <li><Link to="/people?modal=true">Cadastro</Link></li>
@@ -32,9 +32,9 @@ const Header = () => {
             </Link>
           </li>
           <li className={`${styles.dropdown} ${styles.centerItems}`}>
-            <Link className={styles.headerNavLink} to="/sales">
+            <div className={`${styles.headerNavLink} ${styles.dropdown}`} >
               <FaShoppingCart /> Vendas 
-            </Link>
+            </div>
             <ul className={styles.dropdownContent}>
               <li><Link to="/sales" >Lista</Link></li>
               <li><Link to="/sales?modal=true">Cadastro</Link></li>

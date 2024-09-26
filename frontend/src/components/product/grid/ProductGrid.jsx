@@ -44,10 +44,10 @@ const ProductGrid = ({ products, setProducts, setOnEdit }) => {
                         <td className={`${style.td} ${style.tdNome}`}>{item.nome}</td>
                         <td className={`${style.td} ${style.tdValor}`}>{formatToCurrency(item.vr_venda)}</td>
                         <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
-                            <FaEdit onClick={() => handleEdit(item)} />
+                            <FaEdit className={style.icon} onClick={() => handleEdit(item)} />
                         </td>
                         <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
-                            <FaTrash onClick={() => handleDelete(item.id)} />
+                            <FaTrash className={style.icon} onClick={() => handleDelete(item.id)} />
                         </td>
                     </tr>
                 ))}

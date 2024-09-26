@@ -44,7 +44,7 @@ const PeopleList = () => {
     const getPeople = async () => {
         try {
             const res = await axios.get("http://localhost:8800/people");
-            setPeople(res.data.sort((a, b) => (a.nome > b.nome ? 1 : -1)));
+            setPeople(res.data.sort((a, b) => (a.id > b.id ? 1 : -1)));
         } catch (error) {
             toast.error(error.message);
         }
@@ -103,9 +103,10 @@ const PeopleList = () => {
 
         if (selectedFilter === 'name' && selectedName) {
             filteredPeople = filteredPeople.filter(person =>
-                person.nome.toLowerCase().includes(selectedName.toLowerCase())
+                person.nome.includes(selectedName)
             );
         }
+        
 
         if (selectedFilter === 'city' && selectedCity) {
             filteredPeople = filteredPeople.filter(person =>

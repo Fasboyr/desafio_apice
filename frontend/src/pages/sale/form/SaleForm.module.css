@@ -191,6 +191,10 @@
     margin-left: 5px;         
 }
 
+.icon:hover{
+    color: #434040;
+}
+
 
 .alignCenter {
     text-align: center;

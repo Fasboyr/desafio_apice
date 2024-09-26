@@ -42,10 +42,10 @@ const CityGrid = ({ cities, setCities, setOnEdit }) => {
                         <td className={`${style.td} ${style.width30}`}>{item.nome}</td>
                         <td className={`${style.td} ${style.width30}`}>{item.sigla_uf}</td>
                         <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
-                            <FaEdit onClick={() => handleEdit(item)} />
+                            <FaEdit className={style.icon} onClick={() => handleEdit(item)} />
                         </td>
                         <td className={`${style.td} ${style.width5} ${style.alignCenter}`}>
-                            <FaTrash onClick={() => handleDelete(item.id)} />
+                            <FaTrash className={style.icon} onClick={() => handleDelete(item.id)} />
                         </td>
                     </tr>
                 ))}

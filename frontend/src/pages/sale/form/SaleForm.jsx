@@ -14,6 +14,7 @@ const SalesForm = ({ onClose, sale }) => {
     const [item, setItem] = useState([]);
     const [selectedPerson, setSelectedPerson] = useState(null);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [valorUnitario, setValorUnitario] = useState("");
     const [formData, setFormData] = useState({
         id: sale ? sale.id : '',
         total_venda: sale ? sale.total_venda : '',
@@ -65,14 +66,14 @@ const SalesForm = ({ onClose, sale }) => {
 
     useEffect(() => {
         const quantity = parseFloat(formData.qtde) || 0;
-        const unitPrice = parseFloat(formData.vr_venda) || (selectedProduct ? parseFloat(selectedProduct.vr_venda) : 0);
+        const unitPrice = parseFloat(valorUnitario.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
         const subtotal = quantity * unitPrice;
 
         setFormData(prev => ({
             ...prev,
             vr_item: subtotal.toFixed(2)
         }));
-    }, [formData.qtde, formData.vr_venda, selectedProduct]);
+    }, [formData.qtde, valorUnitario]);
 
     formData.total_venda = item
         .filter(i => i.id_venda === formData.id)
@@ -122,16 +123,23 @@ const SalesForm = ({ onClose, sale }) => {
         });
     };
 
+    const handleValorUnitarioChange = (e) => {
+        setValorUnitario(e.target.value); // Atualiza o valor unitário com o valor digitado pelo usuário
+    };
+
     const handleProductChange = (e) => {
         const selected = e.value;
         setSelectedProduct(selected);
+        const formattedPrice = formatToCurrency(selected.vr_venda); // Formata o valor unitário ao selecionar um produto
+        setValorUnitario(formattedPrice);
         setFormData(prev => ({
             ...prev,
-            vr_venda: prev.vr_venda || selected.vr_venda
+            vr_venda: selected.vr_venda
         }));
     };
 
     const handleEditItem = (itemToEdit) => {
+        setValorUnitario(formatToCurrency(itemToEdit.preco_unitario));
         setSelectedProduct(product.find(p => p.id === itemToEdit.id_produto));
         setFormData(prev => ({
             ...prev,
@@ -148,37 +156,32 @@ const SalesForm = ({ onClose, sale }) => {
             return toast.warn("Selecione um produto e a quantidade!");
         }
         const existingItemIndex = item.findIndex(i => i.id_produto === selectedProduct.id && i.id_venda === formData.id);
+        const valorNumerico = parseFloat(valorUnitario.replace(/[^\d,]/g, '').replace(',', '.'));
 
         if (existingItemIndex >= 0) {
             const updatedItem = {
                 ...item[existingItemIndex],
                 qtde: formData.qtde,
-                preco_unitario: formData.vr_venda,
+                preco_unitario: valorNumerico,
                 vr_item: formData.vr_item,
                 wasEdited: true,
             };
 
-
             const newItems = [...item];
             newItems[existingItemIndex] = updatedItem;
             setItem(newItems);
-
-
-            toast.success("Item editado no carrinho.");
         } else {
             const newItem = {
                 id_venda: formData.id,
                 id_produto: selectedProduct.id,
                 produto: selectedProduct.nome,
                 qtde: formData.qtde,
-                preco_unitario: formData.vr_venda,
+                preco_unitario: valorNumerico,
                 vr_item: formData.vr_item,
                 wasEdited: false,
                 isNew: true
             };
             setItem(prevItems => [...prevItems, newItem]);
-
-            toast.success("Item adicionado ao carrinho.");
         }
 
         setFormData(prev => ({
@@ -187,8 +190,12 @@ const SalesForm = ({ onClose, sale }) => {
             vr_item: '',
             vr_venda: ''
         }));
+        setValorUnitario(''); 
         setSelectedProduct(null);
+
+
     };
+
 
     const handleSaveItens = async () => {
         for (const items of item) {
@@ -209,7 +216,6 @@ const SalesForm = ({ onClose, sale }) => {
             });
 
         }
-        toast.success("Itens salvos com sucesso.");
     };
 
 
@@ -288,9 +294,11 @@ const SalesForm = ({ onClose, sale }) => {
         }
     };
 
+
+
     const formatToCurrency = (value) => {
         if (isNaN(value)) {
-            return ""; 
+            return "";
         }
         return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
     };
@@ -349,16 +357,14 @@ const SalesForm = ({ onClose, sale }) => {
                             onChange={handleChange}
                         />
                     </div>
-                    <div className={`${styles.inputArea} ${styles.inputAreaCEP}`}>
+                    <div  className={`${styles.inputArea} ${styles.inputAreaCEP}`}>
                         <label>Valor Unitário</label>
                         <InputText
                             className={styles.input}
                             name="vr_venda"
-                            value={(formatToCurrency(formData.vr_venda)) || ("")}
-                            onChange={handleChange}
-                            keyfilter="money"
+                            value={valorUnitario}
+                            onChange={handleValorUnitarioChange}
                         />
-
                     </div>
                     <div className={`${styles.inputArea} ${styles.inputAreaCEP}`}>
                         <label>Sub. Total</label>
@@ -412,7 +418,7 @@ const SalesForm = ({ onClose, sale }) => {
                         <InputText
                             className={`${styles.input} ${styles.inputTotal}`}
                             name="total_venda"
-                            value={'R$ ' + formData.total_venda}
+                            value={formatToCurrency(formData.total_venda)}
                             readOnly
 
                         />
@@ -423,7 +429,7 @@ const SalesForm = ({ onClose, sale }) => {
 
                     </div>
 
-                    
+
                 </div>
 
 

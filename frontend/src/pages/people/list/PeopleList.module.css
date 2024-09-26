@@ -154,6 +154,11 @@
     margin-left: 5px;
 }
 
+.icon:hover{
+    color: #434040;
+}
+
+
 .tdId {
     width: 5%;
 }
