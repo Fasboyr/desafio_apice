@@ -405,7 +405,7 @@ const SalesForm = ({ onClose, sale }) => {
                                     <td className={`${styles.td} ${styles.tdValorTotal}`}>{formatToCurrency(item.vr_item)}</td>
                                     <td className={`${styles.td} ${styles.tdIcon}`}>
                                         <FaEdit className={styles.icon} onClick={() => handleEditItem(item)} />
-                                        <FaTrash className={styles.icon} onClick={() => handleDelete(item.id)} />
+                                        <FaTrash className={styles.icon} onClick={() => handleDelete(item)} />
                                     </td>
                                 </tr>
                             ))}
