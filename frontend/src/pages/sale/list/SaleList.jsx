@@ -369,8 +369,8 @@ const SalesList = () => {
                                         <td className={`${style.td} ${style.tdTotal}`}>{formatToCurrency(item.total_venda)}</td>
                                         <td className={`${style.td} ${style.tdIcon}`}>
                                             <FaEdit className={style.icon} onClick={() => handleEdit(item)} />
-                                            <FaTrash className={style.icon} onClick={() => handleDelete(item.id)} />
                                             <RiPrinterFill className={style.icon} onClick={() => generatePDF(item)} />
+                                            <FaTrash className={style.icon} onClick={() => handleDelete(item.id)} />
                                         </td>
 
 
