@@ -31,7 +31,7 @@ CREATE TABLE `pessoas` (
   `endereco` varchar(150) NOT NULL,
   `numero` int(11) NOT NULL,
   `complemento` varchar(50) NOT NULL,
-  `telefone` char(14) NOT NULL,
+  `telefone` char(15) NOT NULL,
   `email` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_cidade` (`id_cidade`),
